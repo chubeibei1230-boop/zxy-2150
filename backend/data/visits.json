@@ -1,0 +1,945 @@
+{
+  "visits": [
+    {
+      "id": "visit-001",
+      "repair_order_id": "order-001",
+      "repair_order_no": "WX20240601001",
+      "category_id": "cat-001",
+      "category_name": "水电维修",
+      "user_name": "张三",
+      "user_phone": "13800138001",
+      "address": "阳光花园1栋101",
+      "repair_content": "客厅灯不亮，需要检查电路",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-01T10:30:00+08:00",
+      "status": "pending",
+      "satisfaction": null,
+      "visit_result": null,
+      "unresolved_note": null,
+      "unreachable_reason": null,
+      "matched_rules": [
+        {
+          "rule_id": "rule-001",
+          "rule_name": "常规回访提醒",
+          "rule_description": "维修完成3天后进行常规满意度回访",
+          "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+          "matched_at": "2024-06-04T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-04T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统自动创建回访任务"
+        }
+      ],
+      "created_at": "2024-06-04T09:00:00+08:00",
+      "updated_at": "2024-06-04T09:00:00+08:00"
+    },
+    {
+      "id": "visit-002",
+      "repair_order_id": "order-002",
+      "repair_order_no": "WX20240602002",
+      "category_id": "cat-002",
+      "category_name": "家电维修",
+      "user_name": "李四",
+      "user_phone": "13800138002",
+      "address": "阳光花园2栋202",
+      "repair_content": "空调不制冷，需要维修",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-02T14:20:00+08:00",
+      "status": "pending",
+      "satisfaction": null,
+      "visit_result": null,
+      "unresolved_note": null,
+      "unreachable_reason": null,
+      "matched_rules": [
+        {
+          "rule_id": "rule-001",
+          "rule_name": "常规回访提醒",
+          "rule_description": "维修完成3天后进行常规满意度回访",
+          "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+          "matched_at": "2024-06-05T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-05T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统自动创建回访任务"
+        }
+      ],
+      "created_at": "2024-06-05T09:00:00+08:00",
+      "updated_at": "2024-06-05T09:00:00+08:00"
+    },
+    {
+      "id": "visit-003",
+      "repair_order_id": "order-003",
+      "repair_order_no": "WX20240603003",
+      "category_id": "cat-003",
+      "category_name": "木工维修",
+      "user_name": "王五",
+      "user_phone": "13800138003",
+      "address": "阳光花园3栋303",
+      "repair_content": "房门铰链松动，需要加固",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-03T11:00:00+08:00",
+      "status": "pending",
+      "satisfaction": null,
+      "visit_result": null,
+      "unresolved_note": null,
+      "unreachable_reason": null,
+      "matched_rules": [
+        {
+          "rule_id": "rule-001",
+          "rule_name": "常规回访提醒",
+          "rule_description": "维修完成3天后进行常规满意度回访",
+          "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+          "matched_at": "2024-06-06T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-06T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统自动创建回访任务"
+        }
+      ],
+      "created_at": "2024-06-06T09:00:00+08:00",
+      "updated_at": "2024-06-06T09:00:00+08:00"
+    },
+    {
+      "id": "visit-004",
+      "repair_order_id": "order-004",
+      "repair_order_no": "WX20240604004",
+      "category_id": "cat-004",
+      "category_name": "瓦工维修",
+      "user_name": "赵六",
+      "user_phone": "13800138004",
+      "address": "阳光花园4栋404",
+      "repair_content": "卫生间瓷砖脱落，需要修补",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-04T15:30:00+08:00",
+      "status": "pending",
+      "satisfaction": null,
+      "visit_result": null,
+      "unresolved_note": null,
+      "unreachable_reason": null,
+      "matched_rules": [
+        {
+          "rule_id": "rule-001",
+          "rule_name": "常规回访提醒",
+          "rule_description": "维修完成3天后进行常规满意度回访",
+          "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+          "matched_at": "2024-06-07T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-07T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统自动创建回访任务"
+        }
+      ],
+      "created_at": "2024-06-07T09:00:00+08:00",
+      "updated_at": "2024-06-07T09:00:00+08:00"
+    },
+    {
+      "id": "visit-005",
+      "repair_order_id": "order-005",
+      "repair_order_no": "WX20240605005",
+      "category_id": "cat-005",
+      "category_name": "管道疏通",
+      "user_name": "钱七",
+      "user_phone": "13800138005",
+      "address": "阳光花园5栋505",
+      "repair_content": "厨房下水道堵塞，需要疏通",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-05T09:30:00+08:00",
+      "status": "pending",
+      "satisfaction": null,
+      "visit_result": null,
+      "unresolved_note": null,
+      "unreachable_reason": null,
+      "matched_rules": [
+        {
+          "rule_id": "rule-001",
+          "rule_name": "常规回访提醒",
+          "rule_description": "维修完成3天后进行常规满意度回访",
+          "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+          "matched_at": "2024-06-08T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-08T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统自动创建回访任务"
+        }
+      ],
+      "created_at": "2024-06-08T09:00:00+08:00",
+      "updated_at": "2024-06-08T09:00:00+08:00"
+    },
+    {
+      "id": "visit-006",
+      "repair_order_id": "order-006",
+      "repair_order_no": "WX20240606006",
+      "category_id": "cat-001",
+      "category_name": "水电维修",
+      "user_name": "孙八",
+      "user_phone": "13800138006",
+      "address": "阳光花园6栋606",
+      "repair_content": "水龙头漏水，需要更换",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-06T10:00:00+08:00",
+      "status": "contacted",
+      "satisfaction": 5,
+      "visit_result": "用户对维修服务非常满意，问题已完全解决",
+      "unresolved_note": null,
+      "unreachable_reason": null,
+      "matched_rules": [
+        {
+          "rule_id": "rule-001",
+          "rule_name": "常规回访提醒",
+          "rule_description": "维修完成3天后进行常规满意度回访",
+          "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+          "matched_at": "2024-06-09T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-09T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统自动创建回访任务"
+        },
+        {
+          "status": "contacted",
+          "timestamp": "2024-06-09T14:30:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "电话联系成功，用户表示满意"
+        }
+      ],
+      "created_at": "2024-06-09T09:00:00+08:00",
+      "updated_at": "2024-06-09T14:30:00+08:00"
+    },
+    {
+      "id": "visit-007",
+      "repair_order_id": "order-007",
+      "repair_order_no": "WX20240607007",
+      "category_id": "cat-002",
+      "category_name": "家电维修",
+      "user_name": "周九",
+      "user_phone": "13800138007",
+      "address": "阳光花园7栋707",
+      "repair_content": "冰箱不制冷，需要维修",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-07T16:00:00+08:00",
+      "status": "contacted",
+      "satisfaction": 4,
+      "visit_result": "用户对维修服务满意，冰箱制冷正常",
+      "unresolved_note": null,
+      "unreachable_reason": null,
+      "matched_rules": [
+        {
+          "rule_id": "rule-001",
+          "rule_name": "常规回访提醒",
+          "rule_description": "维修完成3天后进行常规满意度回访",
+          "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+          "matched_at": "2024-06-10T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-10T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统自动创建回访任务"
+        },
+        {
+          "status": "contacted",
+          "timestamp": "2024-06-10T15:00:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "电话联系成功，用户评价4分"
+        }
+      ],
+      "created_at": "2024-06-10T09:00:00+08:00",
+      "updated_at": "2024-06-10T15:00:00+08:00"
+    },
+    {
+      "id": "visit-008",
+      "repair_order_id": "order-008",
+      "repair_order_no": "WX20240608008",
+      "category_id": "cat-001",
+      "category_name": "水电维修",
+      "user_name": "张三",
+      "user_phone": "13800138001",
+      "address": "阳光花园1栋101",
+      "repair_content": "插座没电，需要检查线路",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-08T11:30:00+08:00",
+      "status": "contacted",
+      "satisfaction": 2,
+      "visit_result": "用户表示插座问题仍偶尔出现，不太满意",
+      "unresolved_note": "插座问题未完全解决",
+      "unreachable_reason": null,
+      "matched_rules": [
+        {
+          "rule_id": "rule-001",
+          "rule_name": "常规回访提醒",
+          "rule_description": "维修完成3天后进行常规满意度回访",
+          "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+          "matched_at": "2024-06-11T09:00:00+08:00"
+        },
+        {
+          "rule_id": "rule-003",
+          "rule_name": "重复报修重点回访",
+          "rule_description": "同一用户30天内同类报修，维修完成后立即回访",
+          "reminder_text": "您好，注意到您近期多次报修同类问题，我们特别重视，希望能帮您彻底解决。",
+          "matched_at": "2024-06-11T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-11T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统自动创建回访任务，命中重复报修规则"
+        },
+        {
+          "status": "contacted",
+          "timestamp": "2024-06-11T10:30:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "电话联系成功，用户评价2分，表示问题未完全解决"
+        }
+      ],
+      "created_at": "2024-06-11T09:00:00+08:00",
+      "updated_at": "2024-06-11T10:30:00+08:00"
+    },
+    {
+      "id": "visit-009",
+      "repair_order_id": "order-009",
+      "repair_order_no": "WX20240609009",
+      "category_id": "cat-005",
+      "category_name": "管道疏通",
+      "user_name": "钱七",
+      "user_phone": "13800138005",
+      "address": "阳光花园5栋505",
+      "repair_content": "马桶堵塞，需要疏通",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-09T14:00:00+08:00",
+      "status": "contacted",
+      "satisfaction": 3,
+      "visit_result": "用户表示马桶基本正常，但冲水力度不如以前",
+      "unresolved_note": null,
+      "unreachable_reason": null,
+      "matched_rules": [
+        {
+          "rule_id": "rule-001",
+          "rule_name": "常规回访提醒",
+          "rule_description": "维修完成3天后进行常规满意度回访",
+          "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+          "matched_at": "2024-06-12T09:00:00+08:00"
+        },
+        {
+          "rule_id": "rule-003",
+          "rule_name": "重复报修重点回访",
+          "rule_description": "同一用户30天内同类报修，维修完成后立即回访",
+          "reminder_text": "您好，注意到您近期多次报修同类问题，我们特别重视，希望能帮您彻底解决。",
+          "matched_at": "2024-06-12T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-12T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统自动创建回访任务，命中重复报修规则"
+        },
+        {
+          "status": "contacted",
+          "timestamp": "2024-06-12T11:00:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "电话联系成功，用户评价3分"
+        }
+      ],
+      "created_at": "2024-06-12T09:00:00+08:00",
+      "updated_at": "2024-06-12T11:00:00+08:00"
+    },
+    {
+      "id": "visit-010",
+      "repair_order_id": "order-010",
+      "repair_order_no": "WX20240610010",
+      "category_id": "cat-003",
+      "category_name": "木工维修",
+      "user_name": "吴十",
+      "user_phone": "13800138010",
+      "address": "阳光花园8栋808",
+      "repair_content": "衣柜门损坏，需要修理",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-10T10:30:00+08:00",
+      "status": "contacted",
+      "satisfaction": 5,
+      "visit_result": "用户非常满意，衣柜门使用正常",
+      "unresolved_note": null,
+      "unreachable_reason": null,
+      "matched_rules": [
+        {
+          "rule_id": "rule-001",
+          "rule_name": "常规回访提醒",
+          "rule_description": "维修完成3天后进行常规满意度回访",
+          "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+          "matched_at": "2024-06-13T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-13T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统自动创建回访任务"
+        },
+        {
+          "status": "contacted",
+          "timestamp": "2024-06-13T14:00:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "电话联系成功，用户非常满意"
+        }
+      ],
+      "created_at": "2024-06-13T09:00:00+08:00",
+      "updated_at": "2024-06-13T14:00:00+08:00"
+    },
+    {
+      "id": "visit-011",
+      "repair_order_id": "order-011",
+      "repair_order_no": "WX20240611011",
+      "category_id": "cat-004",
+      "category_name": "瓦工维修",
+      "user_name": "郑十一",
+      "user_phone": "13800138011",
+      "address": "阳光花园9栋909",
+      "repair_content": "墙面开裂，需要修补",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-11T15:00:00+08:00",
+      "status": "reprocess",
+      "satisfaction": 2,
+      "visit_result": "用户表示墙面修补处仍有开裂痕迹",
+      "unresolved_note": "墙面修补质量不佳，需要重新处理",
+      "unreachable_reason": null,
+      "matched_rules": [
+        {
+          "rule_id": "rule-001",
+          "rule_name": "常规回访提醒",
+          "rule_description": "维修完成3天后进行常规满意度回访",
+          "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+          "matched_at": "2024-06-14T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-14T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统自动创建回访任务"
+        },
+        {
+          "status": "contacted",
+          "timestamp": "2024-06-14T10:30:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "电话联系成功，用户评价2分"
+        },
+        {
+          "status": "reprocess",
+          "timestamp": "2024-06-14T11:00:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "用户反馈问题未解决，转为二次处理"
+        }
+      ],
+      "created_at": "2024-06-14T09:00:00+08:00",
+      "updated_at": "2024-06-14T11:00:00+08:00"
+    },
+    {
+      "id": "visit-012",
+      "repair_order_id": "order-012",
+      "repair_order_no": "WX20240612012",
+      "category_id": "cat-001",
+      "category_name": "水电维修",
+      "user_name": "王十二",
+      "user_phone": "13800138012",
+      "address": "阳光花园10栋1010",
+      "repair_content": "空气开关跳闸，需要检查",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-12T09:00:00+08:00",
+      "status": "reprocess",
+      "satisfaction": 1,
+      "visit_result": "用户表示空气开关仍然频繁跳闸，问题严重",
+      "unresolved_note": "电路问题未解决，存在安全隐患，需紧急处理",
+      "unreachable_reason": null,
+      "matched_rules": [
+        {
+          "rule_id": "rule-001",
+          "rule_name": "常规回访提醒",
+          "rule_description": "维修完成3天后进行常规满意度回访",
+          "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+          "matched_at": "2024-06-15T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-15T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统自动创建回访任务"
+        },
+        {
+          "status": "contacted",
+          "timestamp": "2024-06-15T10:00:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "电话联系成功，用户评价1分，非常不满意"
+        },
+        {
+          "status": "reprocess",
+          "timestamp": "2024-06-15T10:30:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "问题严重，立即安排二次处理"
+        }
+      ],
+      "created_at": "2024-06-15T09:00:00+08:00",
+      "updated_at": "2024-06-15T10:30:00+08:00"
+    },
+    {
+      "id": "visit-013",
+      "repair_order_id": "order-008",
+      "repair_order_no": "WX20240608008",
+      "category_id": "cat-001",
+      "category_name": "水电维修",
+      "user_name": "张三",
+      "user_phone": "13800138001",
+      "address": "阳光花园1栋101",
+      "repair_content": "插座没电，需要检查线路",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-08T11:30:00+08:00",
+      "status": "reprocess",
+      "satisfaction": null,
+      "visit_result": null,
+      "unresolved_note": "首次回访满意度2分，需二次回访",
+      "unreachable_reason": null,
+      "matched_rules": [
+        {
+          "rule_id": "rule-002",
+          "rule_name": "低满意度二次回访",
+          "rule_description": "首次回访满意度低于3分时，7天后进行二次回访",
+          "reminder_text": "您好，了解到您对之前的维修服务不太满意，我们想进一步了解情况并为您解决问题。",
+          "matched_at": "2024-06-15T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-15T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统创建二次回访任务，命中低满意度规则"
+        },
+        {
+          "status": "reprocess",
+          "timestamp": "2024-06-15T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "自动标记为二次处理状态"
+        }
+      ],
+      "created_at": "2024-06-15T09:00:00+08:00",
+      "updated_at": "2024-06-15T09:00:00+08:00"
+    },
+    {
+      "id": "visit-014",
+      "repair_order_id": "order-013",
+      "repair_order_no": "WX20240613013",
+      "category_id": "cat-002",
+      "category_name": "家电维修",
+      "user_name": "李十三",
+      "user_phone": "13800138013",
+      "address": "阳光花园11栋1111",
+      "repair_content": "洗衣机不脱水，需要维修",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-13T14:30:00+08:00",
+      "status": "closed",
+      "satisfaction": 5,
+      "visit_result": "用户非常满意，洗衣机使用正常",
+      "unresolved_note": null,
+      "unreachable_reason": null,
+      "matched_rules": [
+        {
+          "rule_id": "rule-001",
+          "rule_name": "常规回访提醒",
+          "rule_description": "维修完成3天后进行常规满意度回访",
+          "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+          "matched_at": "2024-06-16T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-16T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统自动创建回访任务"
+        },
+        {
+          "status": "contacted",
+          "timestamp": "2024-06-16T14:00:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "电话联系成功，用户非常满意"
+        },
+        {
+          "status": "closed",
+          "timestamp": "2024-06-16T14:30:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "回访完成，无遗留问题"
+        }
+      ],
+      "created_at": "2024-06-16T09:00:00+08:00",
+      "updated_at": "2024-06-16T14:30:00+08:00"
+    },
+    {
+      "id": "visit-015",
+      "repair_order_id": "order-014",
+      "repair_order_no": "WX20240614014",
+      "category_id": "cat-005",
+      "category_name": "管道疏通",
+      "user_name": "张十四",
+      "user_phone": "13800138014",
+      "address": "阳光花园12栋1212",
+      "repair_content": "卫生间地漏堵塞，需要疏通",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-14T11:00:00+08:00",
+      "status": "closed",
+      "satisfaction": 4,
+      "visit_result": "用户满意，地漏排水正常",
+      "unresolved_note": null,
+      "unreachable_reason": null,
+      "matched_rules": [
+        {
+          "rule_id": "rule-001",
+          "rule_name": "常规回访提醒",
+          "rule_description": "维修完成3天后进行常规满意度回访",
+          "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+          "matched_at": "2024-06-17T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-17T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统自动创建回访任务"
+        },
+        {
+          "status": "contacted",
+          "timestamp": "2024-06-17T11:00:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "电话联系成功，用户满意"
+        },
+        {
+          "status": "closed",
+          "timestamp": "2024-06-17T11:30:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "回访完成，关闭工单"
+        }
+      ],
+      "created_at": "2024-06-17T09:00:00+08:00",
+      "updated_at": "2024-06-17T11:30:00+08:00"
+    },
+    {
+      "id": "visit-016",
+      "repair_order_id": "order-011",
+      "repair_order_no": "WX20240611011",
+      "category_id": "cat-004",
+      "category_name": "瓦工维修",
+      "user_name": "郑十一",
+      "user_phone": "13800138011",
+      "address": "阳光花园9栋909",
+      "repair_content": "墙面开裂，需要修补",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-11T15:00:00+08:00",
+      "status": "closed",
+      "satisfaction": 4,
+      "visit_result": "二次处理后墙面恢复良好，用户满意",
+      "unresolved_note": null,
+      "unreachable_reason": null,
+      "matched_rules": [
+        {
+          "rule_id": "rule-002",
+          "rule_name": "低满意度二次回访",
+          "rule_description": "首次回访满意度低于3分时，7天后进行二次回访",
+          "reminder_text": "您好，了解到您对之前的维修服务不太满意，我们想进一步了解情况并为您解决问题。",
+          "matched_at": "2024-06-18T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-18T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统创建二次回访任务"
+        },
+        {
+          "status": "contacted",
+          "timestamp": "2024-06-18T14:00:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "电话联系成功，二次处理后用户满意"
+        },
+        {
+          "status": "closed",
+          "timestamp": "2024-06-18T14:30:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "问题解决，回访完成"
+        }
+      ],
+      "created_at": "2024-06-18T09:00:00+08:00",
+      "updated_at": "2024-06-18T14:30:00+08:00"
+    },
+    {
+      "id": "visit-017",
+      "repair_order_id": "order-015",
+      "repair_order_no": "WX20240615015",
+      "category_id": "cat-003",
+      "category_name": "木工维修",
+      "user_name": "刘十五",
+      "user_phone": "13800138015",
+      "address": "阳光花园13栋1313",
+      "repair_content": "木地板起翘，需要修复",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-15T16:00:00+08:00",
+      "status": "closed",
+      "satisfaction": 5,
+      "visit_result": "用户非常满意，木地板修复完美",
+      "unresolved_note": null,
+      "unreachable_reason": null,
+      "matched_rules": [
+        {
+          "rule_id": "rule-001",
+          "rule_name": "常规回访提醒",
+          "rule_description": "维修完成3天后进行常规满意度回访",
+          "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+          "matched_at": "2024-06-18T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-18T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统自动创建回访任务"
+        },
+        {
+          "status": "contacted",
+          "timestamp": "2024-06-18T15:00:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "电话联系成功，用户非常满意"
+        },
+        {
+          "status": "closed",
+          "timestamp": "2024-06-18T15:30:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "回访完成，关闭工单"
+        }
+      ],
+      "created_at": "2024-06-18T09:00:00+08:00",
+      "updated_at": "2024-06-18T15:30:00+08:00"
+    },
+    {
+      "id": "visit-018",
+      "repair_order_id": "order-016",
+      "repair_order_no": "WX20240616016",
+      "category_id": "cat-001",
+      "category_name": "水电维修",
+      "user_name": "陈十六",
+      "user_phone": "13800138016",
+      "address": "阳光花园14栋1414",
+      "repair_content": "灯具开关失灵，需要更换",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-16T10:30:00+08:00",
+      "status": "unreachable",
+      "satisfaction": null,
+      "visit_result": null,
+      "unresolved_note": null,
+      "unreachable_reason": "phone_off",
+      "matched_rules": [
+        {
+          "rule_id": "rule-001",
+          "rule_name": "常规回访提醒",
+          "rule_description": "维修完成3天后进行常规满意度回访",
+          "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+          "matched_at": "2024-06-19T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-19T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统自动创建回访任务"
+        },
+        {
+          "status": "unreachable",
+          "timestamp": "2024-06-19T14:00:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "多次拨打用户电话，用户手机关机"
+        }
+      ],
+      "created_at": "2024-06-19T09:00:00+08:00",
+      "updated_at": "2024-06-19T14:00:00+08:00"
+    },
+    {
+      "id": "visit-019",
+      "repair_order_id": "order-017",
+      "repair_order_no": "WX20240617017",
+      "category_id": "cat-004",
+      "category_name": "瓦工维修",
+      "user_name": "杨十七",
+      "user_phone": "13800138017",
+      "address": "阳光花园15栋1515",
+      "repair_content": "地砖空鼓，需要重新铺设",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-17T14:00:00+08:00",
+      "status": "unreachable",
+      "satisfaction": null,
+      "visit_result": null,
+      "unresolved_note": null,
+      "unreachable_reason": "no_answer",
+      "matched_rules": [
+        {
+          "rule_id": "rule-001",
+          "rule_name": "常规回访提醒",
+          "rule_description": "维修完成3天后进行常规满意度回访",
+          "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+          "matched_at": "2024-06-20T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-20T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统自动创建回访任务"
+        },
+        {
+          "status": "unreachable",
+          "timestamp": "2024-06-20T15:00:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "多次拨打无人接听，稍后再试"
+        }
+      ],
+      "created_at": "2024-06-20T09:00:00+08:00",
+      "updated_at": "2024-06-20T15:00:00+08:00"
+    },
+    {
+      "id": "visit-020",
+      "repair_order_id": "order-018",
+      "repair_order_no": "WX20240618018",
+      "category_id": "cat-002",
+      "category_name": "家电维修",
+      "user_name": "黄十八",
+      "user_phone": "13800138018",
+      "address": "阳光花园16栋1616",
+      "repair_content": "电视无信号，需要维修",
+      "handler_id": "user-002",
+      "handler_name": "回访操作员",
+      "completed_at": "2024-06-18T11:30:00+08:00",
+      "status": "unreachable",
+      "satisfaction": null,
+      "visit_result": null,
+      "unresolved_note": null,
+      "unreachable_reason": "rejected",
+      "matched_rules": [
+        {
+          "rule_id": "rule-001",
+          "rule_name": "常规回访提醒",
+          "rule_description": "维修完成3天后进行常规满意度回访",
+          "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+          "matched_at": "2024-06-21T09:00:00+08:00"
+        }
+      ],
+      "status_timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-06-21T09:00:00+08:00",
+          "operator_id": "system",
+          "operator_name": "系统",
+          "remark": "系统自动创建回访任务"
+        },
+        {
+          "status": "unreachable",
+          "timestamp": "2024-06-21T10:30:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "用户接通后表示暂时不方便接受回访"
+        }
+      ],
+      "created_at": "2024-06-21T09:00:00+08:00",
+      "updated_at": "2024-06-21T10:30:00+08:00"
+    }
+  ]
+}

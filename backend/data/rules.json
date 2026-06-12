@@ -1,0 +1,49 @@
+{
+  "rules": [
+    {
+      "id": "rule-001",
+      "name": "常规回访提醒",
+      "description": "维修完成3天后进行常规满意度回访",
+      "category_ids": ["cat-001", "cat-002", "cat-003", "cat-004", "cat-005"],
+      "days_after_completion": 3,
+      "satisfaction_threshold": null,
+      "check_repeat_repair": false,
+      "priority": 1,
+      "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
+      "enabled": true,
+      "deleted": false,
+      "created_at": "2024-01-01T00:00:00+08:00",
+      "updated_at": "2024-01-01T00:00:00+08:00"
+    },
+    {
+      "id": "rule-002",
+      "name": "低满意度二次回访",
+      "description": "首次回访满意度低于3分时，7天后进行二次回访",
+      "category_ids": ["cat-001", "cat-002", "cat-003", "cat-004", "cat-005"],
+      "days_after_completion": 7,
+      "satisfaction_threshold": 3,
+      "check_repeat_repair": false,
+      "priority": 2,
+      "reminder_text": "您好，了解到您对之前的维修服务不太满意，我们想进一步了解情况并为您解决问题。",
+      "enabled": true,
+      "deleted": false,
+      "created_at": "2024-01-01T00:00:00+08:00",
+      "updated_at": "2024-01-01T00:00:00+08:00"
+    },
+    {
+      "id": "rule-003",
+      "name": "重复报修重点回访",
+      "description": "同一用户30天内同类报修，维修完成后立即回访",
+      "category_ids": ["cat-001", "cat-005"],
+      "days_after_completion": 0,
+      "satisfaction_threshold": null,
+      "check_repeat_repair": true,
+      "priority": 3,
+      "reminder_text": "您好，注意到您近期多次报修同类问题，我们特别重视，希望能帮您彻底解决。",
+      "enabled": true,
+      "deleted": false,
+      "created_at": "2024-01-01T00:00:00+08:00",
+      "updated_at": "2024-01-01T00:00:00+08:00"
+    }
+  ]
+}
