@@ -1,11 +1,12 @@
 from django.http import JsonResponse, HttpRequest
 from common.decorators import require_role
 from common.utils import success_response, error_response, paginated_response, format_datetime, parse_datetime
-from repositories import visit_repository
+from repositories import visit_repository, repair_order_repository, rule_repository, category_repository
+from services.rule_engine import RuleEngine
 import datetime
 
 
-@require_role(['admin', 'operator', 'auditor'])
+@require_role(['admin', 'operator', 'auditor', 'user'])
 def visits_list(request: HttpRequest) -> JsonResponse:
     if request.method != 'GET':
         return JsonResponse(error_response('方法不允许', code=405), status=405)
@@ -19,6 +20,9 @@ def visits_list(request: HttpRequest) -> JsonResponse:
     satisfaction_max = request.GET.get('satisfaction_max')
     date_from = request.GET.get('date_from')
     date_to = request.GET.get('date_to')
+    keyword = request.GET.get('keyword')
+    rule_id = request.GET.get('rule_id')
+    unreachable_reason = request.GET.get('unreachable_reason')
 
     all_visits = visit_repository.list()
 
@@ -28,6 +32,22 @@ def visits_list(request: HttpRequest) -> JsonResponse:
         all_visits = [v for v in all_visits if v.get('handler_id') == handler_id]
     if status:
         all_visits = [v for v in all_visits if v.get('status') == status]
+    if keyword:
+        keyword_lower = keyword.lower()
+        all_visits = [
+            v for v in all_visits
+            if keyword_lower in str(v.get('repair_order_no', '')).lower()
+            or keyword_lower in str(v.get('user_name', '')).lower()
+            or keyword_lower in str(v.get('user_phone', '')).lower()
+            or keyword_lower in str(v.get('repair_content', '')).lower()
+        ]
+    if rule_id:
+        all_visits = [
+            v for v in all_visits
+            if any(rule.get('rule_id') == rule_id for rule in v.get('matched_rules', []))
+        ]
+    if unreachable_reason:
+        all_visits = [v for v in all_visits if v.get('unreachable_reason') == unreachable_reason]
     if satisfaction_min:
         min_val = int(satisfaction_min)
         all_visits = [v for v in all_visits if v.get('satisfaction') is not None and v.get('satisfaction') >= min_val]
@@ -43,6 +63,8 @@ def visits_list(request: HttpRequest) -> JsonResponse:
     if date_to:
         try:
             to_dt = parse_datetime(date_to)
+            if len(date_to) == 10:
+                to_dt = to_dt + datetime.timedelta(days=1) - datetime.timedelta(microseconds=1)
             all_visits = [v for v in all_visits if parse_datetime(v.get('created_at', '')) <= to_dt]
         except (ValueError, TypeError):
             pass
@@ -60,7 +82,7 @@ def visits_list(request: HttpRequest) -> JsonResponse:
     ))
 
 
-@require_role(['admin', 'operator', 'auditor'])
+@require_role(['admin', 'operator', 'auditor', 'user'])
 def visits_detail(request: HttpRequest, pk: str) -> JsonResponse:
     if request.method != 'GET':
         return JsonResponse(error_response('方法不允许', code=405), status=405)
@@ -72,9 +94,9 @@ def visits_detail(request: HttpRequest, pk: str) -> JsonResponse:
     return JsonResponse(success_response(visit))
 
 
-@require_role(['admin', 'operator'])
+@require_role(['admin', 'operator', 'user'])
 def visits_process(request: HttpRequest, pk: str) -> JsonResponse:
-    if request.method != 'POST':
+    if request.method not in ['POST', 'PUT']:
         return JsonResponse(error_response('方法不允许', code=405), status=405)
 
     visit = visit_repository.get_by_id(pk)
@@ -137,3 +159,58 @@ def visits_process(request: HttpRequest, pk: str) -> JsonResponse:
     updated = visit_repository.update(pk, update_data)
 
     return JsonResponse(success_response(updated, '处理成功'))
+
+
+@require_role(['admin'])
+def visits_generate_reminders(request: HttpRequest) -> JsonResponse:
+    if request.method != 'POST':
+        return JsonResponse(error_response('方法不允许', code=405), status=405)
+
+    rules = sorted(rule_repository.list_enabled(), key=lambda r: r.get('priority', 99))
+    categories = category_repository.list()
+    visits = visit_repository.list()
+    existing_order_ids = {v.get('repair_order_id') for v in visits}
+    created = []
+    now = format_datetime()
+
+    for order in repair_order_repository.list():
+        if order.get('id') in existing_order_ids:
+            continue
+        matched_rules = RuleEngine.match_rules(order, categories, rules, visits + created)
+        if not matched_rules:
+            continue
+
+        first_status = 'pending'
+        status_timeline = [{
+            'status': first_status,
+            'timestamp': now,
+            'operator_id': 'system',
+            'operator_name': '系统',
+            'remark': '系统自动创建回访任务'
+        }]
+
+        new_visit = visit_repository.create({
+            'repair_order_id': order.get('id'),
+            'repair_order_no': order.get('order_no'),
+            'category_id': order.get('category_id'),
+            'category_name': order.get('category_name'),
+            'user_name': order.get('user_name'),
+            'user_phone': order.get('user_phone'),
+            'address': order.get('address'),
+            'repair_content': order.get('repair_content'),
+            'handler_id': order.get('handler_id'),
+            'handler_name': order.get('handler_name'),
+            'completed_at': order.get('completed_at'),
+            'status': first_status,
+            'satisfaction': None,
+            'visit_result': None,
+            'unresolved_note': None,
+            'unreachable_reason': None,
+            'matched_rules': matched_rules,
+            'status_timeline': status_timeline,
+            'created_at': now,
+            'updated_at': now
+        })
+        created.append(new_visit)
+
+    return JsonResponse(success_response({'created_count': len(created), 'items': created}, '生成完成'))

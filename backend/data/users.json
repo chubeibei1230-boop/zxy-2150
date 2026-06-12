@@ -26,6 +26,15 @@
       "role": "auditor",
       "enabled": true,
       "created_at": "2024-01-03T00:00:00+08:00"
+    },
+    {
+      "id": "user-004",
+      "username": "user",
+      "password_hash": "pbkdf2_sha256$600000$0eTZtH0bwx06zqxCN6R79S$RPbWU5DwtqjdxdQQ/YXB4CmoqO4Sj0CpyJOHm7g6LCE=",
+      "name": "普通用户",
+      "role": "user",
+      "enabled": true,
+      "created_at": "2024-01-04T00:00:00+08:00"
     }
   ]
 }

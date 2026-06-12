@@ -3,7 +3,7 @@ from typing import List, Callable
 from django.http import JsonResponse, HttpRequest
 
 
-VALID_ROLES = ['admin', 'operator', 'auditor']
+VALID_ROLES = ['admin', 'operator', 'auditor', 'user']
 WRITE_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE']
 
 

@@ -42,7 +42,7 @@ def login_view(request: HttpRequest) -> JsonResponse:
     }, '登录成功'))
 
 
-@require_role(['admin', 'operator', 'auditor'])
+@require_role(['admin', 'operator', 'auditor', 'user'])
 def me_view(request: HttpRequest) -> JsonResponse:
     user_info = request.user_info
     user = user_repository.get_by_id(user_info['user_id'])

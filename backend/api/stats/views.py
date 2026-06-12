@@ -29,16 +29,19 @@ def dashboard_stats(request: HttpRequest) -> JsonResponse:
     ]
 
     rule_hit_counter = Counter()
+    rule_names = {}
     for visit in all_visits:
         matched_rules = visit.get('matched_rules', [])
         for rule in matched_rules:
+            rule_id = rule.get('rule_id')
             rule_name = rule.get('rule_name')
-            if rule_name:
-                rule_hit_counter[rule_name] += 1
+            if rule_id and rule_name:
+                rule_hit_counter[rule_id] += 1
+                rule_names[rule_id] = rule_name
 
     rule_hit_ranking = [
-        {'rule_name': name, 'hit_count': count}
-        for name, count in rule_hit_counter.most_common()
+        {'rule_id': rule_id, 'rule_name': rule_names.get(rule_id, rule_id), 'hit_count': count}
+        for rule_id, count in rule_hit_counter.most_common()
     ]
 
     status_counter = Counter(v.get('status') for v in all_visits)

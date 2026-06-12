@@ -10,6 +10,7 @@ const roleLabels: Record<User['role'], string> = {
   admin: '管理员',
   operator: '操作员',
   auditor: '审核员',
+  user: '普通用户',
 };
 
 export default function MainLayout() {

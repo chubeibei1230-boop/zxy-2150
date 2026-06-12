@@ -4,7 +4,7 @@ from common.utils import success_response, error_response, format_datetime, hash
 from repositories import user_repository
 
 
-@require_role(['admin'])
+@require_role(['admin', 'operator', 'auditor', 'user'])
 def users_list(request: HttpRequest) -> JsonResponse:
     if request.method == 'GET':
         users = user_repository.list()
@@ -19,6 +19,8 @@ def users_list(request: HttpRequest) -> JsonResponse:
         return JsonResponse(success_response(users))
 
     if request.method == 'POST':
+        if request.user_info.get('role') != 'admin':
+            return JsonResponse(error_response('权限不足，无法访问该资源'), status=403)
         body = getattr(request, 'json_body', {})
         username = body.get('username')
         password = body.get('password')
@@ -29,7 +31,7 @@ def users_list(request: HttpRequest) -> JsonResponse:
         if not username or not password or not name or not role:
             return JsonResponse(error_response('用户名、密码、姓名、角色不能为空'), status=400)
 
-        valid_roles = ['admin', 'operator', 'auditor']
+        valid_roles = ['admin', 'operator', 'auditor', 'user']
         if role not in valid_roles:
             return JsonResponse(error_response('无效的角色值'), status=400)
 
@@ -63,7 +65,7 @@ def users_list(request: HttpRequest) -> JsonResponse:
     return JsonResponse(error_response('方法不允许', code=405), status=405)
 
 
-@require_role(['admin'])
+@require_role(['admin', 'operator', 'auditor', 'user'])
 def users_detail(request: HttpRequest, pk: str) -> JsonResponse:
     user = user_repository.get_by_id(pk)
     if not user:
@@ -81,12 +83,14 @@ def users_detail(request: HttpRequest, pk: str) -> JsonResponse:
         return JsonResponse(success_response(user_data))
 
     if request.method == 'PUT':
+        if request.user_info.get('role') != 'admin':
+            return JsonResponse(error_response('权限不足，无法访问该资源'), status=403)
         body = getattr(request, 'json_body', {})
         name = body.get('name', user['name'])
         role = body.get('role', user['role'])
         enabled = body.get('enabled', user.get('enabled', True))
 
-        valid_roles = ['admin', 'operator', 'auditor']
+        valid_roles = ['admin', 'operator', 'auditor', 'user']
         if role not in valid_roles:
             return JsonResponse(error_response('无效的角色值'), status=400)
 
@@ -108,6 +112,8 @@ def users_detail(request: HttpRequest, pk: str) -> JsonResponse:
         return JsonResponse(success_response(user_data, '更新成功'))
 
     if request.method == 'DELETE':
+        if request.user_info.get('role') != 'admin':
+            return JsonResponse(error_response('权限不足，无法访问该资源'), status=403)
         current_user_id = request.user_info.get('user_id')
         if current_user_id == pk:
             return JsonResponse(error_response('不能删除当前登录用户'), status=400)
@@ -122,7 +128,7 @@ def users_detail(request: HttpRequest, pk: str) -> JsonResponse:
 
 @require_role(['admin'])
 def users_reset_password(request: HttpRequest, pk: str) -> JsonResponse:
-    if request.method != 'POST':
+    if request.method not in ['POST', 'PUT']:
         return JsonResponse(error_response('方法不允许', code=405), status=405)
 
     user = user_repository.get_by_id(pk)
@@ -130,7 +136,7 @@ def users_reset_password(request: HttpRequest, pk: str) -> JsonResponse:
         return JsonResponse(error_response('用户不存在'), status=404)
 
     body = getattr(request, 'json_body', {})
-    new_password = body.get('new_password')
+    new_password = body.get('new_password') or body.get('password')
 
     if not new_password or len(new_password) < 6:
         return JsonResponse(error_response('新密码不能为空且长度不能少于6位'), status=400)

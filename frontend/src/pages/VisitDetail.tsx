@@ -23,10 +23,12 @@ import {
   UNREACHABLE_REASONS,
 } from '@/types';
 import VisitProcessModal from '@/components/VisitProcessModal';
+import { useAuthStore } from '@/store/auth';
 
 export default function VisitDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user } = useAuthStore();
   const [loading, setLoading] = useState(true);
   const [visit, setVisit] = useState<Visit | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -83,7 +85,7 @@ export default function VisitDetail() {
         style={{ marginTop: 16 }}
         title="基本信息"
         extra={
-          visit.status !== 'closed' && (
+          user?.role !== 'auditor' && visit.status !== 'closed' && (
             <Button type="primary" icon={<EditOutlined />} onClick={() => setModalVisible(true)}>
               处理回访
             </Button>

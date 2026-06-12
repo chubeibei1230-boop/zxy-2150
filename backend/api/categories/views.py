@@ -4,16 +4,19 @@ from common.utils import success_response, error_response, format_datetime
 from repositories import category_repository
 
 
-@require_role(['admin', 'operator', 'auditor'])
+@require_role(['admin', 'operator', 'auditor', 'user'])
 def categories_list(request: HttpRequest) -> JsonResponse:
     if request.method == 'GET':
         categories = category_repository.list()
         return JsonResponse(success_response(categories))
 
     if request.method == 'POST':
+        if request.user_info.get('role') != 'admin':
+            return JsonResponse(error_response('权限不足，无法访问该资源'), status=403)
         body = getattr(request, 'json_body', {})
         name = body.get('name')
         description = body.get('description', '')
+        enabled = body.get('enabled', True)
 
         if not name:
             return JsonResponse(error_response('类别名称不能为空'), status=400)
@@ -26,7 +29,7 @@ def categories_list(request: HttpRequest) -> JsonResponse:
         new_category = category_repository.create({
             'name': name,
             'description': description,
-            'enabled': True,
+            'enabled': enabled,
             'created_at': now,
             'updated_at': now
         })
@@ -36,7 +39,7 @@ def categories_list(request: HttpRequest) -> JsonResponse:
     return JsonResponse(error_response('方法不允许', code=405), status=405)
 
 
-@require_role(['admin', 'operator', 'auditor'])
+@require_role(['admin', 'operator', 'auditor', 'user'])
 def categories_detail(request: HttpRequest, pk: str) -> JsonResponse:
     category = category_repository.get_by_id(pk)
     if not category:
@@ -46,6 +49,8 @@ def categories_detail(request: HttpRequest, pk: str) -> JsonResponse:
         return JsonResponse(success_response(category))
 
     if request.method == 'PUT':
+        if request.user_info.get('role') != 'admin':
+            return JsonResponse(error_response('权限不足，无法访问该资源'), status=403)
         body = getattr(request, 'json_body', {})
         name = body.get('name', category['name'])
         description = body.get('description', category.get('description', ''))
@@ -69,6 +74,8 @@ def categories_detail(request: HttpRequest, pk: str) -> JsonResponse:
         return JsonResponse(success_response(updated, '更新成功'))
 
     if request.method == 'DELETE':
+        if request.user_info.get('role') != 'admin':
+            return JsonResponse(error_response('权限不足，无法访问该资源'), status=403)
         success = category_repository.delete(pk)
         if not success:
             return JsonResponse(error_response('删除失败'), status=500)

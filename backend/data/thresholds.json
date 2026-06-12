@@ -1,0 +1,8 @@
+{
+  "thresholds": {
+    "default_visit_days": 7,
+    "satisfaction_standard": 4,
+    "max_unreachable_attempts": 3,
+    "repeat_repair_days": 30
+  }
+}

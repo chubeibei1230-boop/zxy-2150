@@ -18,5 +18,5 @@ export const deleteUser = (id: string): Promise<void> => {
 };
 
 export const resetPassword = (id: string, password: string): Promise<void> => {
-  return put(`/users/${id}/password`, { password });
+  return post(`/users/${id}/reset-password`, { new_password: password });
 };

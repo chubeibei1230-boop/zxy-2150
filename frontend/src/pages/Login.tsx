@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, Input, Button, Card, message } from 'antd';
+import { Form, Input, Button, Card, message, Space, Divider } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { login } from '@/api/auth';
@@ -15,6 +15,13 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const { setAuth } = useAuthStore();
 
+  const quickAccounts = [
+    { label: '管理员', username: 'admin', password: '123456' },
+    { label: '操作员', username: 'operator', password: '123456' },
+    { label: '审计员', username: 'auditor', password: '123456' },
+    { label: '普通用户', username: 'user', password: '123456' },
+  ];
+
   const handleSubmit = async (values: LoginForm) => {
     setLoading(true);
     try {
@@ -27,6 +34,10 @@ export default function Login() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleQuickLogin = (username: string, password: string) => {
+    handleSubmit({ username, password });
   };
 
   return (
@@ -88,6 +99,19 @@ export default function Login() {
             </Button>
           </Form.Item>
         </Form>
+
+        <Divider style={{ margin: '24px 0 16px' }}>快捷登录</Divider>
+        <Space wrap style={{ width: '100%', justifyContent: 'center' }}>
+          {quickAccounts.map((account) => (
+            <Button
+              key={account.username}
+              loading={loading}
+              onClick={() => handleQuickLogin(account.username, account.password)}
+            >
+              {account.label}
+            </Button>
+          ))}
+        </Space>
       </Card>
     </div>
   );

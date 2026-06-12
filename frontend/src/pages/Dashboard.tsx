@@ -4,7 +4,7 @@ import { ClockCircleOutlined, ReloadOutlined, SmileOutlined, FileTextOutlined } 
 import ReactECharts from 'echarts-for-react';
 import { useNavigate } from 'react-router-dom';
 import { getDashboardStats } from '@/api/stats';
-import { DashboardStats, VisitFilter, STATUS_OPTIONS } from '@/types';
+import { DashboardStats, VisitFilter, STATUS_OPTIONS, UNREACHABLE_REASONS } from '@/types';
 import { useVisitFilterStore } from '@/store/visitFilter';
 
 export default function Dashboard() {
@@ -78,7 +78,8 @@ export default function Dashboard() {
             },
             data: stats.status_distribution.map((item) => ({
               value: item.count,
-              name: item.status,
+              name: STATUS_OPTIONS.find((opt) => opt.value === item.status)?.label || item.status,
+              status: item.status,
             })),
           },
         ],
@@ -118,7 +119,8 @@ export default function Dashboard() {
             radius: '50%',
             data: stats.unreachable_reasons.map((item) => ({
               value: item.count,
-              name: item.reason,
+              name: UNREACHABLE_REASONS.find((reason) => reason.value === item.reason)?.label || item.reason,
+              reason: item.reason,
             })),
             emphasis: {
               itemStyle: {
@@ -143,14 +145,14 @@ export default function Dashboard() {
 
   const ruleChartEvents = {
     click: (params: any) => {
-      const ruleName = params.name;
-      navigateWithFilter({ keyword: ruleName });
+      const item = stats?.rule_hit_ranking.find((rule) => rule.rule_name === params.name);
+      navigateWithFilter(item?.rule_id ? { rule_id: item.rule_id } : { keyword: params.name });
     },
   };
 
   const unreachableChartEvents = {
-    click: () => {
-      navigateWithFilter({ status: 'unreachable' });
+    click: (params: any) => {
+      navigateWithFilter({ status: 'unreachable', unreachable_reason: params.data.reason });
     },
   };
 

@@ -2,7 +2,7 @@ export interface User {
   id: string;
   username: string;
   name: string;
-  role: 'admin' | 'operator' | 'auditor';
+  role: 'admin' | 'operator' | 'auditor' | 'user';
   enabled: boolean;
   created_at: string;
 }
@@ -81,6 +81,8 @@ export interface VisitFilter {
   satisfaction_max?: number;
   date_from?: string;
   date_to?: string;
+  rule_id?: string;
+  unreachable_reason?: string;
   page?: number;
   page_size?: number;
 }

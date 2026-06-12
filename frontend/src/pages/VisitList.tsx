@@ -9,12 +9,14 @@ import { getUsers } from '@/api/users';
 import { Visit, Category, User, STATUS_OPTIONS, UNREACHABLE_REASONS, VisitFilter } from '@/types';
 import { useVisitFilterStore } from '@/store/visitFilter';
 import VisitProcessModal from '@/components/VisitProcessModal';
+import { useAuthStore } from '@/store/auth';
 import type { ColumnsType } from 'antd/es/table';
 
 const { RangePicker } = DatePicker;
 
 export default function VisitList() {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
   const { filter: storedFilter, clearFilter } = useVisitFilterStore();
   const [loading, setLoading] = useState(false);
   const [visits, setVisits] = useState<Visit[]>([]);
@@ -95,6 +97,7 @@ export default function VisitList() {
     if (values.category_id) filters.category_id = values.category_id;
     if (values.handler_id) filters.handler_id = values.handler_id;
     if (values.status) filters.status = values.status;
+    if (values.unreachable_reason) filters.unreachable_reason = values.unreachable_reason;
     if (values.keyword) filters.keyword = values.keyword;
     if (values.satisfaction_min !== undefined) filters.satisfaction_min = values.satisfaction_min;
     if (values.satisfaction_max !== undefined) filters.satisfaction_max = values.satisfaction_max;
@@ -128,6 +131,8 @@ export default function VisitList() {
     setProcessingVisit(null);
     fetchVisits(currentFilters);
   };
+
+  const canProcess = user?.role !== 'auditor';
 
   const columns: ColumnsType<Visit> = [
     {
@@ -221,7 +226,7 @@ export default function VisitList() {
           >
             详情
           </Button>
-          {record.status === 'pending' && (
+          {canProcess && record.status === 'pending' && (
             <Button
               type="link"
               size="small"
@@ -274,6 +279,17 @@ export default function VisitList() {
                   {STATUS_OPTIONS.map((opt) => (
                     <Select.Option key={opt.value} value={opt.value}>
                       {opt.label}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={8} lg={6}>
+              <Form.Item name="unreachable_reason" label="无法联系原因">
+                <Select placeholder="请选择" allowClear>
+                  {UNREACHABLE_REASONS.map((reason) => (
+                    <Select.Option key={reason.value} value={reason.value}>
+                      {reason.label}
                     </Select.Option>
                   ))}
                 </Select>

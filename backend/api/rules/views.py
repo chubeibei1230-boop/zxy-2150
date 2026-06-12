@@ -4,7 +4,7 @@ from common.utils import success_response, error_response, format_datetime
 from repositories import rule_repository
 
 
-@require_role(['admin', 'operator', 'auditor'])
+@require_role(['admin', 'operator', 'auditor', 'user'])
 def rules_list(request: HttpRequest) -> JsonResponse:
     if request.method == 'GET':
         rules = rule_repository.list()
@@ -12,6 +12,8 @@ def rules_list(request: HttpRequest) -> JsonResponse:
         return JsonResponse(success_response(rules))
 
     if request.method == 'POST':
+        if request.user_info.get('role') != 'admin':
+            return JsonResponse(error_response('权限不足，无法访问该资源'), status=403)
         body = getattr(request, 'json_body', {})
         name = body.get('name')
         description = body.get('description', '')
@@ -47,7 +49,7 @@ def rules_list(request: HttpRequest) -> JsonResponse:
     return JsonResponse(error_response('方法不允许', code=405), status=405)
 
 
-@require_role(['admin', 'operator', 'auditor'])
+@require_role(['admin', 'operator', 'auditor', 'user'])
 def rules_detail(request: HttpRequest, pk: str) -> JsonResponse:
     rule = rule_repository.get_by_id(pk)
     if not rule or rule.get('deleted', False):
@@ -57,6 +59,8 @@ def rules_detail(request: HttpRequest, pk: str) -> JsonResponse:
         return JsonResponse(success_response(rule))
 
     if request.method == 'PUT':
+        if request.user_info.get('role') != 'admin':
+            return JsonResponse(error_response('权限不足，无法访问该资源'), status=403)
         body = getattr(request, 'json_body', {})
         name = body.get('name', rule['name'])
         description = body.get('description', rule.get('description', ''))
@@ -87,6 +91,8 @@ def rules_detail(request: HttpRequest, pk: str) -> JsonResponse:
         return JsonResponse(success_response(updated, '更新成功'))
 
     if request.method == 'DELETE':
+        if request.user_info.get('role') != 'admin':
+            return JsonResponse(error_response('权限不足，无法访问该资源'), status=403)
         success = rule_repository.soft_delete(pk)
         if not success:
             return JsonResponse(error_response('删除失败'), status=500)

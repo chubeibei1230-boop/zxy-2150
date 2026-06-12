@@ -1,22 +1,17 @@
 import { useState, useEffect } from 'react';
 import {
   Tabs, Table, Tag, Button, Form, Input, InputNumber, Select, Switch, Modal, Space, Spin, message, Popconfirm, Card, Row, Col } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, KeyOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined, DeleteOutlined, KeyOutlined, BellOutlined } from '@ant-design/icons';
 import { getRules, createRule, updateRule, deleteRule } from '@/api/rules';
 import { getCategories, createCategory, updateCategory, deleteCategory } from '@/api/categories';
 import { getUsers, createUser, updateUser, deleteUser, resetPassword } from '@/api/users';
+import { getThresholds, updateThresholds, ThresholdConfig } from '@/api/thresholds';
+import { generateReminders } from '@/api/visits';
 import { Rule, Category, User } from '@/types';
 import type { ColumnsType } from 'antd/es/table';
 
 const { TextArea } = Input;
 const { TabPane } = Tabs;
-
-interface ThresholdConfig {
-  default_visit_days: number;
-  satisfaction_standard: number;
-  max_unreachable_attempts: number;
-  repeat_repair_days: number;
-}
 
 const DEFAULT_THRESHOLD: ThresholdConfig = {
   default_visit_days: 7,
@@ -72,23 +67,36 @@ export default function RulesConfig() {
   };
 
   const loadThreshold = () => {
-    const saved = localStorage.getItem('threshold_config');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      setThreshold(parsed);
-      thresholdForm.setFieldsValue(parsed);
-    } else {
-      thresholdForm.setFieldsValue(DEFAULT_THRESHOLD);
-    }
+    getThresholds()
+      .then((data) => {
+        setThreshold(data);
+        thresholdForm.setFieldsValue(data);
+      })
+      .catch((err: any) => {
+        message.error(err.message || '获取阈值配置失败');
+        thresholdForm.setFieldsValue(DEFAULT_THRESHOLD);
+      });
   };
 
   const saveThreshold = async (values: ThresholdConfig) => {
     try {
-      localStorage.setItem('threshold_config', JSON.stringify(values));
-      setThreshold(values);
+      const saved = await updateThresholds(values);
+      setThreshold(saved);
       message.success('保存成功');
     } catch (err: any) {
       message.error(err.message || '保存失败');
+    }
+  };
+
+  const handleGenerateReminders = async () => {
+    setLoading(true);
+    try {
+      const result = await generateReminders();
+      message.success(`生成完成，新增 ${result.created_count} 条提醒`);
+    } catch (err: any) {
+      message.error(err.message || '生成提醒失败');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -327,7 +335,7 @@ export default function RulesConfig() {
     {
       title: '角色', dataIndex: 'role', key: 'role', width: 100,
       render: (role: string) => {
-        const roleMap: Record<string, string> = { admin: '管理员', operator: '操作员', auditor: '审核员' };
+        const roleMap: Record<string, string> = { admin: '管理员', operator: '操作员', auditor: '审核员', user: '普通用户' };
         return <Tag color={role === 'admin' ? 'red' : role === 'auditor' ? 'purple' : 'blue'}>{roleMap[role]}</Tag>;
       },
     },
@@ -367,7 +375,10 @@ export default function RulesConfig() {
 
           <TabPane tab="回访规则" key="2">
             <div style={{ marginBottom: 16, textAlign: 'right' }}>
-              <Button type="primary" icon={<PlusOutlined />} onClick={handleAddRule}>新增规则</Button>
+              <Space>
+                <Button icon={<BellOutlined />} onClick={handleGenerateReminders}>生成新提醒</Button>
+                <Button type="primary" icon={<PlusOutlined />} onClick={handleAddRule}>新增规则</Button>
+              </Space>
             </div>
             <Spin spinning={loading}>
               <Table columns={ruleColumns} dataSource={rules} rowKey="id" pagination={false} scroll={{ x: 1200 }} />
@@ -464,11 +475,12 @@ export default function RulesConfig() {
           {!editingUser && <Form.Item name="username" label="用户名" rules={[{ required: true, message: '请输入用户名' }]}><Input placeholder="请输入用户名" /></Form.Item>}
           <Form.Item name="name" label="姓名" rules={[{ required: true, message: '请输入姓名' }]}><Input placeholder="请输入姓名" /></Form.Item>
           <Form.Item name="role" label="角色" rules={[{ required: true, message: '请选择角色' }]}>
-            <Select placeholder="请选择">
-              <Select.Option value="admin">管理员</Select.Option>
-              <Select.Option value="operator">操作员</Select.Option>
-              <Select.Option value="auditor">审核员</Select.Option>
-            </Select>
+              <Select placeholder="请选择">
+                <Select.Option value="admin">管理员</Select.Option>
+                <Select.Option value="operator">操作员</Select.Option>
+                <Select.Option value="auditor">审核员</Select.Option>
+                <Select.Option value="user">普通用户</Select.Option>
+              </Select>
           </Form.Item>
           {!editingUser && <Form.Item name="password" label="密码" rules={[{ required: true, message: '请输入密码' }]}><Input.Password placeholder="请输入密码" /></Form.Item>}
           {editingUser && <Form.Item name="enabled" label="是否启用" valuePropName="checked"><Switch defaultChecked /></Form.Item>}
