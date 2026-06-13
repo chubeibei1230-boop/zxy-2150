@@ -23,11 +23,46 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<Dashboard />} />
-          <Route path="visits" element={<VisitList />} />
-          <Route path="visits/:id" element={<VisitDetail />} />
-          <Route path="warnings" element={<WarningList />} />
-          <Route path="supervisions" element={<SupervisionList />} />
+          <Route
+            index
+            element={
+              <ProtectedRoute roles={['admin', 'operator', 'auditor']}>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="visits"
+            element={
+              <ProtectedRoute roles={['admin', 'operator', 'auditor']}>
+                <VisitList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="visits/:id"
+            element={
+              <ProtectedRoute roles={['admin', 'operator', 'auditor']}>
+                <VisitDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="warnings"
+            element={
+              <ProtectedRoute roles={['admin', 'operator', 'auditor']}>
+                <WarningList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="supervisions"
+            element={
+              <ProtectedRoute roles={['admin', 'operator', 'auditor']}>
+                <SupervisionList />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="rules"
             element={

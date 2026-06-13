@@ -41,6 +41,8 @@ def supervisions_list(request: HttpRequest) -> JsonResponse:
     if status:
         if status == 'active':
             all_items = [s for s in all_items if s.get('status') in [STATUS_PENDING, STATUS_ASSIGNED, STATUS_PROCESSING]]
+        elif status == 'finished':
+            all_items = [s for s in all_items if s.get('status') in [STATUS_RESOLVED, STATUS_CLOSED, STATUS_DISMISSED]]
         else:
             all_items = [s for s in all_items if s.get('status') == status]
     if assignee_id:
@@ -136,6 +138,10 @@ def supervisions_follow_up(request: HttpRequest, pk: str) -> JsonResponse:
     if item.get('status') in [STATUS_RESOLVED, STATUS_CLOSED, STATUS_DISMISSED]:
         return JsonResponse(error_response('该事项已结束，无法跟进'), status=400)
 
+    operator_info = request.user_info
+    if operator_info.get('role') != 'admin' and item.get('assignee_id') != operator_info.get('user_id'):
+        return JsonResponse(error_response('您不是该事项的责任人，无权跟进'), status=403)
+
     body = getattr(request, 'json_body', {})
     note = body.get('note', '')
     action = body.get('action', 'note')
@@ -143,7 +149,6 @@ def supervisions_follow_up(request: HttpRequest, pk: str) -> JsonResponse:
     if not note:
         return JsonResponse(error_response('请填写跟进说明'), status=400)
 
-    operator_info = request.user_info
     updated = supervision_engine.add_progress(
         pk,
         operator_info.get('user_id'),
@@ -170,13 +175,16 @@ def supervisions_resolve(request: HttpRequest, pk: str) -> JsonResponse:
     if item.get('status') in [STATUS_RESOLVED, STATUS_CLOSED, STATUS_DISMISSED]:
         return JsonResponse(error_response('该事项已结束'), status=400)
 
+    operator_info = request.user_info
+    if operator_info.get('role') != 'admin' and item.get('assignee_id') != operator_info.get('user_id'):
+        return JsonResponse(error_response('您不是该事项的责任人，无权标记解决'), status=403)
+
     body = getattr(request, 'json_body', {})
     note = body.get('note', '')
 
     if not note:
         return JsonResponse(error_response('请填写解决说明'), status=400)
 
-    operator_info = request.user_info
     updated = supervision_engine.resolve_supervision(
         pk,
         operator_info.get('user_id'),

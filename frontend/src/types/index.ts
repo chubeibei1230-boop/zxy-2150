@@ -275,6 +275,7 @@ export const UNREACHABLE_REASONS: { value: string; label: string }[] = [
 export type SupervisionSourceType = 'dissatisfied' | 'reprocess' | 'unreachable' | 'overdue';
 export type SupervisionRisk = 'high' | 'medium' | 'low';
 export type SupervisionStatus = 'pending' | 'assigned' | 'processing' | 'resolved' | 'closed' | 'dismissed';
+export type SupervisionStatusFilter = SupervisionStatus | 'active' | 'finished';
 
 export interface SupervisionSourceDetail {
   satisfaction?: number;
@@ -331,7 +332,7 @@ export interface Supervision {
 export interface SupervisionFilter {
   source_type?: SupervisionSourceType;
   risk?: SupervisionRisk;
-  status?: SupervisionStatus | 'active';
+  status?: SupervisionStatusFilter;
   assignee_id?: string;
   keyword?: string;
   date_from?: string;
@@ -368,7 +369,7 @@ export const SUPERVISION_RISK_OPTIONS: { value: SupervisionRisk; label: string; 
   { value: 'low', label: '低风险', color: 'blue' },
 ];
 
-export const SUPERVISION_STATUS_OPTIONS: { value: SupervisionStatus | 'active'; label: string; color: string }[] = [
+export const SUPERVISION_STATUS_OPTIONS: { value: SupervisionStatusFilter; label: string; color: string }[] = [
   { value: 'pending', label: '待分派', color: 'default' },
   { value: 'assigned', label: '已分派', color: 'processing' },
   { value: 'processing', label: '处理中', color: 'blue' },
@@ -376,4 +377,5 @@ export const SUPERVISION_STATUS_OPTIONS: { value: SupervisionStatus | 'active'; 
   { value: 'closed', label: '已关闭', color: 'default' },
   { value: 'dismissed', label: '无需处理', color: 'default' },
   { value: 'active', label: '进行中', color: 'orange' },
+  { value: 'finished', label: '已结束', color: 'geekblue' },
 ];

@@ -35,34 +35,38 @@ export default function MainLayout() {
   };
 
   const menuItems = [
-    {
-      key: '/',
-      icon: <DashboardOutlined />,
-      label: '统计看板',
-    },
-    {
-      key: '/supervisions',
-      icon: (
-        <Badge dot size="default" offset={[6, 2]}>
-          <FlagOutlined />
-        </Badge>
-      ),
-      label: '异常督办',
-    },
-    {
-      key: '/warnings',
-      icon: (
-        <Badge dot size="default" offset={[6, 2]}>
-          <BellOutlined />
-        </Badge>
-      ),
-      label: '异常预警',
-    },
-    {
-      key: '/visits',
-      icon: <UnorderedListOutlined />,
-      label: '回访列表',
-    },
+    ...(user?.role !== 'user'
+      ? [
+          {
+            key: '/',
+            icon: <DashboardOutlined />,
+            label: '统计看板',
+          },
+          {
+            key: '/supervisions',
+            icon: (
+              <Badge dot size="default" offset={[6, 2]}>
+                <FlagOutlined />
+              </Badge>
+            ),
+            label: '异常督办',
+          },
+          {
+            key: '/warnings',
+            icon: (
+              <Badge dot size="default" offset={[6, 2]}>
+                <BellOutlined />
+              </Badge>
+            ),
+            label: '异常预警',
+          },
+          {
+            key: '/visits',
+            icon: <UnorderedListOutlined />,
+            label: '回访列表',
+          },
+        ]
+      : []),
     ...(user?.role === 'admin'
       ? [
           {

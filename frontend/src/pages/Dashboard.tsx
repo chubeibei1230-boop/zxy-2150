@@ -112,7 +112,7 @@ export default function Dashboard() {
         navigateToSupervisions({ status: 'processing' });
         break;
       case 'supervision_closed':
-        navigateToSupervisions({ status: 'closed' });
+        navigateToSupervisions({ status: 'finished' });
         break;
       case 'supervision_high_risk':
         navigateToSupervisions({ risk: 'high' });

@@ -333,7 +333,14 @@ export default function SupervisionList() {
 
   const isAdmin = user?.role === 'admin';
   const canOperate = user?.role !== 'auditor';
+  const canGenerate = user?.role === 'admin' || user?.role === 'operator';
   const isItemActive = (status: string) => !['resolved', 'closed', 'dismissed'].includes(status);
+  const canOperateOnItem = (item: Supervision) => {
+    if (!isItemActive(item.status)) return false;
+    if (!canOperate) return false;
+    if (isAdmin) return true;
+    return item.assignee_id === user?.id;
+  };
 
   const renderRiskTag = (risk: string) => {
     const option = SUPERVISION_RISK_OPTIONS.find((o) => o.value === risk);
@@ -453,7 +460,7 @@ export default function SupervisionList() {
           >
             跳转业务
           </Button>
-          {canOperate && isItemActive(record.status) && (
+          {canOperateOnItem(record) && (
             <>
               <Button
                 type="link"
@@ -513,9 +520,11 @@ export default function SupervisionList() {
         title="筛选条件"
         style={{ marginBottom: 16 }}
         extra={
-          <Button type="primary" icon={<ThunderboltOutlined />} loading={generating} onClick={handleGenerate}>
-            生成督办事项
-          </Button>
+          canGenerate ? (
+            <Button type="primary" icon={<ThunderboltOutlined />} loading={generating} onClick={handleGenerate}>
+              生成督办事项
+            </Button>
+          ) : null
         }
       >
         <Form form={form} layout="vertical" onFinish={handleSearch}>
