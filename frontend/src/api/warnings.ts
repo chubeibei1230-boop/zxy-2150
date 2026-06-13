@@ -13,6 +13,7 @@ export const refreshWarnings = (): Promise<{
   created: number;
   updated: number;
   resolved: number;
+  escalated?: number;
   total_active: number;
 }> => {
   return post('/warnings/refresh');

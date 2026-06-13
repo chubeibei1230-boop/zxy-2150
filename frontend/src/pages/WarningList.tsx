@@ -86,11 +86,24 @@ export default function WarningList() {
     const initialFilter: WarningFilter = {};
     if (params.get('warning_type')) initialFilter.warning_type = params.get('warning_type') as any;
     if (params.get('level')) initialFilter.level = params.get('level') as any;
-    if (Object.keys(initialFilter).length > 0) {
-      form.setFieldsValue(initialFilter);
-      setCurrentFilters(initialFilter);
+    if (params.get('status')) initialFilter.status = params.get('status') as any;
+    if (params.get('handler_id')) initialFilter.handler_id = params.get('handler_id') as string;
+    if (params.get('keyword')) initialFilter.keyword = params.get('keyword') as string;
+    if (params.get('date_from')) initialFilter.date_from = params.get('date_from') as string;
+    if (params.get('date_to')) initialFilter.date_to = params.get('date_to') as string;
+
+    const nextPagination = {
+      current: Number(params.get('page')) || 1,
+      pageSize: Number(params.get('page_size')) || 10,
+    };
+    const formValues: any = { ...initialFilter };
+    if (initialFilter.date_from && initialFilter.date_to) {
+      formValues.date_range = [dayjs(initialFilter.date_from), dayjs(initialFilter.date_to)];
     }
-    fetchWarnings(initialFilter);
+    form.setFieldsValue(formValues);
+    setCurrentFilters(initialFilter);
+    setPagination(nextPagination);
+    fetchWarnings(initialFilter, nextPagination);
   }, [location.search]);
 
   useEffect(() => {
@@ -122,13 +135,13 @@ export default function WarningList() {
     }
   };
 
-  const fetchWarnings = async (filters?: WarningFilter) => {
+  const fetchWarnings = async (filters?: WarningFilter, pageConfig = pagination) => {
     setLoading(true);
     try {
       const data = await getWarnings({
         ...filters,
-        page: pagination.current,
-        page_size: pagination.pageSize,
+        page: pageConfig.current,
+        page_size: pageConfig.pageSize,
       });
       setWarnings(data.items);
       setTotal(data.total);
@@ -168,7 +181,7 @@ export default function WarningList() {
     }
     setCurrentFilters(filters);
     setPagination({ ...pagination, current: 1 });
-    fetchWarnings({ ...filters, page: 1, page_size: pagination.pageSize });
+    fetchWarnings(filters, { ...pagination, current: 1 });
   };
 
   const handleReset = () => {

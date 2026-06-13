@@ -9,6 +9,8 @@ export interface ThresholdConfig {
   warning_low_satisfaction: number;
   warning_unreachable_count: number;
   warning_reprocess_days: number;
+  warning_follow_up_days: number;
+  warning_escalation_days: number;
 }
 
 export const getThresholds = (): Promise<ThresholdConfig> => {
