@@ -83,11 +83,12 @@ class WarningEngine:
             return False, None
         rule = warning_rule_repository.get_by_type(WARNING_TYPE_LONG_PENDING)
         threshold = threshold_repository.get()
-        pending_days = (
-            rule.get('params', {}).get('pending_days')
-            if rule
-            else threshold.get('warning_pending_days', 3)
-        )
+        default_pending_days = threshold.get('warning_pending_days', 3)
+        pending_days = default_pending_days
+        if rule:
+            rule_pending_days = rule.get('params', {}).get('pending_days')
+            if rule_pending_days and rule_pending_days > 0:
+                pending_days = rule_pending_days
         created_at = cls._parse_dt(visit.get('created_at'))
         if not created_at:
             return False, None
@@ -104,11 +105,12 @@ class WarningEngine:
             return False, None
         rule = warning_rule_repository.get_by_type(WARNING_TYPE_LOW_SATISFACTION)
         threshold = threshold_repository.get()
-        sat_threshold = (
-            rule.get('params', {}).get('satisfaction_threshold')
-            if rule
-            else threshold.get('warning_low_satisfaction', 3)
-        )
+        default_sat = threshold.get('warning_low_satisfaction', 3)
+        sat_threshold = default_sat
+        if rule:
+            rule_sat = rule.get('params', {}).get('satisfaction_threshold')
+            if rule_sat and rule_sat > 0 and rule_sat <= 5:
+                sat_threshold = rule_sat
         if satisfaction <= sat_threshold:
             reminder = rule.get('reminder_text') if rule else f'满意度为{satisfaction}分，低于标准'
             return True, reminder
@@ -119,11 +121,12 @@ class WarningEngine:
         unreachable_count = cls._get_unreachable_count(visit)
         rule = warning_rule_repository.get_by_type(WARNING_TYPE_UNREACHABLE_MANY)
         threshold = threshold_repository.get()
-        count_threshold = (
-            rule.get('params', {}).get('unreachable_count')
-            if rule
-            else threshold.get('warning_unreachable_count', 2)
-        )
+        default_count = threshold.get('warning_unreachable_count', 2)
+        count_threshold = default_count
+        if rule:
+            rule_count = rule.get('params', {}).get('unreachable_count')
+            if rule_count and rule_count > 0:
+                count_threshold = rule_count
         if unreachable_count >= count_threshold:
             reminder = rule.get('reminder_text') if rule else f'已无法联系{unreachable_count}次'
             return True, reminder
@@ -138,11 +141,12 @@ class WarningEngine:
             return False, None
         rule = warning_rule_repository.get_by_type(WARNING_TYPE_REPROCESS_TIMEOUT)
         threshold = threshold_repository.get()
-        reprocess_days = (
-            rule.get('params', {}).get('reprocess_days')
-            if rule
-            else threshold.get('warning_reprocess_days', 3)
-        )
+        default_days = threshold.get('warning_reprocess_days', 3)
+        reprocess_days = default_days
+        if rule:
+            rule_days = rule.get('params', {}).get('reprocess_days')
+            if rule_days and rule_days > 0:
+                reprocess_days = rule_days
         days_passed = cls._days_between(cls._now(), reprocess_at)
         if days_passed >= reprocess_days:
             reminder = rule.get('reminder_text') if rule else f'二次处理已超过{reprocess_days}天未关闭'
@@ -236,12 +240,25 @@ class WarningEngine:
             if existing:
                 new_detail = warning_data.get('detail', {})
                 old_detail = existing.get('detail', {})
-                if new_detail != old_detail or existing.get('status') != WARNING_STATUS_ACTIVE:
+                new_level = warning_data.get('level')
+                old_level = existing.get('level')
+                new_priority = warning_data.get('priority')
+                old_priority = existing.get('priority')
+                new_reminder = warning_data.get('reminder_text')
+                old_reminder = existing.get('reminder_text')
+                has_change = (
+                    new_detail != old_detail
+                    or new_level != old_level
+                    or new_priority != old_priority
+                    or new_reminder != old_reminder
+                )
+                if has_change:
                     warning_repository.update(existing['id'], {
                         'detail': new_detail,
-                        'reminder_text': warning_data.get('reminder_text'),
+                        'level': new_level,
+                        'priority': new_priority,
+                        'reminder_text': new_reminder,
                         'updated_at': now,
-                        'status': WARNING_STATUS_ACTIVE,
                     })
                     updated += 1
                 existing_map.pop(warning_type, None)
@@ -312,12 +329,25 @@ class WarningEngine:
                 if existing:
                     new_detail = warning_data.get('detail', {})
                     old_detail = existing.get('detail', {})
-                    if new_detail != old_detail or existing.get('status') != WARNING_STATUS_ACTIVE:
+                    new_level = warning_data.get('level')
+                    old_level = existing.get('level')
+                    new_priority = warning_data.get('priority')
+                    old_priority = existing.get('priority')
+                    new_reminder = warning_data.get('reminder_text')
+                    old_reminder = existing.get('reminder_text')
+                    has_change = (
+                        new_detail != old_detail
+                        or new_level != old_level
+                        or new_priority != old_priority
+                        or new_reminder != old_reminder
+                    )
+                    if has_change:
                         warning_repository.update(existing['id'], {
                             'detail': new_detail,
-                            'reminder_text': warning_data.get('reminder_text'),
+                            'level': new_level,
+                            'priority': new_priority,
+                            'reminder_text': new_reminder,
                             'updated_at': now,
-                            'status': WARNING_STATUS_ACTIVE,
                         })
                         updated += 1
                     existing_map.pop(key, None)

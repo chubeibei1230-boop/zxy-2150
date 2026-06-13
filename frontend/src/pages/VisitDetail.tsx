@@ -14,7 +14,7 @@ import {
   Rate,
 } from 'antd';
 import { ArrowLeftOutlined, EditOutlined } from '@ant-design/icons';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { getVisitDetail } from '@/api/visits';
 import {
@@ -28,10 +28,14 @@ import { useAuthStore } from '@/store/auth';
 export default function VisitDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuthStore();
   const [loading, setLoading] = useState(true);
   const [visit, setVisit] = useState<Visit | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const queryParams = new URLSearchParams(location.search);
+  const fromPage = queryParams.get('from');
 
   useEffect(() => {
     if (id) {
@@ -57,6 +61,22 @@ export default function VisitDetail() {
     fetchDetail();
   };
 
+  const handleBack = () => {
+    if (fromPage === 'warnings') {
+      const params = new URLSearchParams();
+      queryParams.forEach((value, key) => {
+        if (key !== 'from') {
+          params.set(key, value);
+        }
+      });
+      navigate(`/warnings?${params.toString()}`);
+    } else {
+      navigate('/visits');
+    }
+  };
+
+  const backButtonText = fromPage === 'warnings' ? '返回预警列表' : '返回列表';
+
   const getStatusOption = (status: string) => {
     return STATUS_OPTIONS.find((opt) => opt.value === status);
   };
@@ -77,8 +97,8 @@ export default function VisitDetail() {
 
   return (
     <div>
-      <Button icon={<ArrowLeftOutlined />} onClick={() => navigate('/visits')}>
-        返回列表
+      <Button icon={<ArrowLeftOutlined />} onClick={handleBack}>
+        {backButtonText}
       </Button>
 
       <Card

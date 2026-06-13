@@ -266,7 +266,10 @@ def warning_rules_detail(request: HttpRequest, pk: str) -> JsonResponse:
             return JsonResponse(error_response('权限不足'), status=403)
         body = getattr(request, 'json_body', {})
         now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).isoformat()
+        old_type = rule.get('type')
+        new_type = body.get('type', old_type)
         update_data = {
+            'type': new_type,
             'name': body.get('name', rule.get('name')),
             'description': body.get('description', rule.get('description', '')),
             'enabled': body.get('enabled', rule.get('enabled', True)),

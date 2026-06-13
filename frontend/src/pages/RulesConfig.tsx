@@ -46,6 +46,7 @@ export default function RulesConfig() {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [resetUser, setResetUser] = useState<User | null>(null);
   const [editingWarningRule, setEditingWarningRule] = useState<WarningRule | null>(null);
+  const [selectedWarningType, setSelectedWarningType] = useState<string>('');
 
   const [categoryForm] = Form.useForm();
   const [ruleForm] = Form.useForm();
@@ -300,6 +301,7 @@ export default function RulesConfig() {
 
   const handleAddWarningRule = () => {
     setEditingWarningRule(null);
+    setSelectedWarningType('');
     warningRuleForm.resetFields();
     warningRuleForm.setFieldsValue({
       priority: warningRules.length + 1,
@@ -312,6 +314,7 @@ export default function RulesConfig() {
 
   const handleEditWarningRule = (rule: WarningRule) => {
     setEditingWarningRule(rule);
+    setSelectedWarningType(rule.type);
     warningRuleForm.setFieldsValue({
       ...rule,
       params: { ...rule.params },
@@ -717,28 +720,81 @@ export default function RulesConfig() {
             <TextArea rows={2} placeholder="预警触发时显示的提醒内容" />
           </Form.Item>
           <Card type="inner" title="规则参数" size="small" style={{ marginBottom: 16 }}>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item name={['params', 'pending_days']} label="待处理天数阈值">
-                  <InputNumber min={1} style={{ width: '100%' }} placeholder="长期未处理规则使用" />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item name={['params', 'satisfaction_threshold']} label="满意度阈值">
-                  <InputNumber min={1} max={5} style={{ width: '100%' }} placeholder="低满意度规则使用" />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item name={['params', 'unreachable_count']} label="无法联系次数阈值">
-                  <InputNumber min={1} style={{ width: '100%' }} placeholder="无法联系规则使用" />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item name={['params', 'reprocess_days']} label="二次处理天数阈值">
-                  <InputNumber min={1} style={{ width: '100%' }} placeholder="二次处理超时规则使用" />
-                </Form.Item>
-              </Col>
-            </Row>
+            <Form.Item
+              noStyle
+              shouldUpdate={(prevValues, curValues) => prevValues.type !== curValues.type}
+            >
+              {({ getFieldValue }) => {
+                const currentType = getFieldValue('type') || selectedWarningType;
+                return (
+                  <Row gutter={16}>
+                    <Col span={12}>
+                      <Form.Item
+                        name={['params', 'pending_days']}
+                        label="待处理天数阈值"
+                        rules={
+                          currentType === 'long_pending'
+                            ? [{ required: true, message: '请输入待处理天数阈值' }]
+                            : []
+                        }
+                        style={{ display: currentType === 'long_pending' ? 'block' : 'none' }}
+                      >
+                        <InputNumber min={1} style={{ width: '100%' }} placeholder="长期未处理规则使用" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item
+                        name={['params', 'satisfaction_threshold']}
+                        label="满意度阈值"
+                        rules={
+                          currentType === 'low_satisfaction'
+                            ? [{ required: true, message: '请输入满意度阈值' }]
+                            : []
+                        }
+                        style={{ display: currentType === 'low_satisfaction' ? 'block' : 'none' }}
+                      >
+                        <InputNumber min={1} max={5} style={{ width: '100%' }} placeholder="低满意度规则使用" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item
+                        name={['params', 'unreachable_count']}
+                        label="无法联系次数阈值"
+                        rules={
+                          currentType === 'unreachable_many'
+                            ? [{ required: true, message: '请输入无法联系次数阈值' }]
+                            : []
+                        }
+                        style={{ display: currentType === 'unreachable_many' ? 'block' : 'none' }}
+                      >
+                        <InputNumber min={1} style={{ width: '100%' }} placeholder="无法联系规则使用" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item
+                        name={['params', 'reprocess_days']}
+                        label="二次处理天数阈值"
+                        rules={
+                          currentType === 'reprocess_timeout'
+                            ? [{ required: true, message: '请输入二次处理天数阈值' }]
+                            : []
+                        }
+                        style={{ display: currentType === 'reprocess_timeout' ? 'block' : 'none' }}
+                      >
+                        <InputNumber min={1} style={{ width: '100%' }} placeholder="二次处理超时规则使用" />
+                      </Form.Item>
+                    </Col>
+                    {!currentType && (
+                      <Col span={24}>
+                        <div style={{ color: '#999', textAlign: 'center', padding: '12px 0' }}>
+                          请先选择预警类型
+                        </div>
+                      </Col>
+                    )}
+                  </Row>
+                );
+              }}
+            </Form.Item>
           </Card>
           <Form.Item name="enabled" label="是否启用" valuePropName="checked">
             <Switch defaultChecked />

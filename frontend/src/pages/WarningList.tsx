@@ -387,7 +387,20 @@ export default function WarningList() {
             type="link"
             size="small"
             icon={<ArrowRightOutlined />}
-            onClick={() => navigate(`/visits/${record.visit_id}`)}
+            onClick={() => {
+              const params = new URLSearchParams();
+              params.set('from', 'warnings');
+              if (currentFilters.warning_type) params.set('warning_type', currentFilters.warning_type);
+              if (currentFilters.level) params.set('level', currentFilters.level);
+              if (currentFilters.status) params.set('status', currentFilters.status);
+              if (currentFilters.handler_id) params.set('handler_id', currentFilters.handler_id);
+              if (currentFilters.keyword) params.set('keyword', currentFilters.keyword);
+              if (currentFilters.date_from) params.set('date_from', currentFilters.date_from);
+              if (currentFilters.date_to) params.set('date_to', currentFilters.date_to);
+              params.set('page', String(pagination.current));
+              params.set('page_size', String(pagination.pageSize));
+              navigate(`/visits/${record.visit_id}?${params.toString()}`);
+            }}
           >
             跳转业务
           </Button>
@@ -540,7 +553,24 @@ export default function WarningList() {
             关闭
           </Button>,
           currentWarning && (
-            <Button key="visit" type="primary" onClick={() => navigate(`/visits/${currentWarning.visit_id}`)}>
+            <Button
+              key="visit"
+              type="primary"
+              onClick={() => {
+                const params = new URLSearchParams();
+                params.set('from', 'warnings');
+                if (currentFilters.warning_type) params.set('warning_type', currentFilters.warning_type);
+                if (currentFilters.level) params.set('level', currentFilters.level);
+                if (currentFilters.status) params.set('status', currentFilters.status);
+                if (currentFilters.handler_id) params.set('handler_id', currentFilters.handler_id);
+                if (currentFilters.keyword) params.set('keyword', currentFilters.keyword);
+                if (currentFilters.date_from) params.set('date_from', currentFilters.date_from);
+                if (currentFilters.date_to) params.set('date_to', currentFilters.date_to);
+                params.set('page', String(pagination.current));
+                params.set('page_size', String(pagination.pageSize));
+                navigate(`/visits/${currentWarning.visit_id}?${params.toString()}`);
+              }}
+            >
               前往业务处理 <ArrowRightOutlined />
             </Button>
           ),
