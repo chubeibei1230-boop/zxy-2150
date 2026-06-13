@@ -7,6 +7,7 @@ import {
   UserOutlined,
   BellOutlined,
   FlagOutlined,
+  ThunderboltOutlined,
 } from '@ant-design/icons';
 import { useLocation, useNavigate, Outlet } from 'react-router-dom';
 import { useAuthStore } from '@/store/auth';
@@ -41,6 +42,15 @@ export default function MainLayout() {
             key: '/',
             icon: <DashboardOutlined />,
             label: '统计看板',
+          },
+          {
+            key: '/workbench',
+            icon: (
+              <Badge dot size="default" offset={[6, 2]}>
+                <ThunderboltOutlined />
+              </Badge>
+            ),
+            label: '重点回访闭环工作台',
           },
           {
             key: '/supervisions',
@@ -88,6 +98,9 @@ export default function MainLayout() {
   ];
 
   const getSelectedKey = () => {
+    if (location.pathname.startsWith('/workbench')) {
+      return '/workbench';
+    }
     if (location.pathname.startsWith('/visits/')) {
       return '/visits';
     }

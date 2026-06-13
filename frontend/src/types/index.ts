@@ -379,3 +379,93 @@ export const SUPERVISION_STATUS_OPTIONS: { value: SupervisionStatusFilter; label
   { value: 'active', label: '进行中', color: 'orange' },
   { value: 'finished', label: '已结束', color: 'geekblue' },
 ];
+
+export type WorkbenchItemType = 'visit' | 'warning' | 'supervision';
+export type WorkbenchRisk = 'high' | 'medium' | 'low';
+export type WorkbenchProgressStage = 'pending' | 'contacting' | 'following_up' | 'resolving' | 'closed';
+
+export interface WorkbenchItem {
+  id: string;
+  item_type: WorkbenchItemType;
+  item_type_label: string;
+  source_id: string;
+  visit_id: string;
+  warning_id?: string;
+  supervision_id?: string;
+  title: string;
+  risk: WorkbenchRisk;
+  risk_label: string;
+  status: string;
+  status_label: string;
+  is_overdue: boolean;
+  progress_stage: WorkbenchProgressStage;
+  progress_stage_label: string;
+  unreachable_count: number;
+  satisfaction: number | null;
+  handler_id: string | null;
+  handler_name: string | null;
+  assignee_id?: string | null;
+  assignee_name?: string | null;
+  repair_order_no: string;
+  category_name: string;
+  user_name: string;
+  user_phone: string;
+  address: string;
+  repair_content: string;
+  warning_type?: WarningType;
+  warning_type_label?: string;
+  source_type?: SupervisionSourceType;
+  source_type_label?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface WorkbenchStats {
+  today_pending: number;
+  high_risk: number;
+  overdue: number;
+  closed: number;
+  pending_visits: number;
+  active_warnings: number;
+  active_supervisions: number;
+  reprocess_visits: number;
+  unreachable_visits: number;
+  overdue_visits: number;
+  overdue_warnings: number;
+  overdue_supervisions: number;
+  today_closed: number;
+}
+
+export interface WorkbenchFilter {
+  item_type?: WorkbenchItemType | 'all';
+  handler_id?: string;
+  risk?: WorkbenchRisk;
+  status?: string;
+  keyword?: string;
+  date_from?: string;
+  date_to?: string;
+  is_overdue?: string;
+  page?: number;
+  page_size?: number;
+}
+
+export const WORKBENCH_ITEM_TYPE_OPTIONS: { value: WorkbenchItemType | 'all'; label: string; color: string }[] = [
+  { value: 'all', label: '全部', color: 'default' },
+  { value: 'visit', label: '回访待办', color: 'blue' },
+  { value: 'warning', label: '异常预警', color: 'orange' },
+  { value: 'supervision', label: '异常督办', color: 'red' },
+];
+
+export const WORKBENCH_RISK_OPTIONS: { value: WorkbenchRisk; label: string; color: string }[] = [
+  { value: 'high', label: '高风险', color: 'red' },
+  { value: 'medium', label: '中风险', color: 'orange' },
+  { value: 'low', label: '低风险', color: 'blue' },
+];
+
+export const WORKBENCH_PROGRESS_STAGE_OPTIONS: { value: WorkbenchProgressStage; label: string; color: string }[] = [
+  { value: 'pending', label: '待处理', color: 'default' },
+  { value: 'contacting', label: '联系中', color: 'processing' },
+  { value: 'following_up', label: '跟进中', color: 'blue' },
+  { value: 'resolving', label: '处理中', color: 'orange' },
+  { value: 'closed', label: '已闭环', color: 'success' },
+];

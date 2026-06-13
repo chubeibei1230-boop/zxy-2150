@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from '@/pages/Login';
 import Dashboard from '@/pages/Dashboard';
+import Workbench from '@/pages/Workbench';
 import VisitList from '@/pages/VisitList';
 import VisitDetail from '@/pages/VisitDetail';
 import WarningList from '@/pages/WarningList';
@@ -28,6 +29,14 @@ function App() {
             element={
               <ProtectedRoute roles={['admin', 'operator', 'auditor']}>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="workbench"
+            element={
+              <ProtectedRoute roles={['admin', 'operator', 'auditor']}>
+                <Workbench />
               </ProtectedRoute>
             }
           />

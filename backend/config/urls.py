@@ -28,6 +28,7 @@ from api.supervisions.views import (
     supervisions_dismiss,
     supervisions_stats,
 )
+from api.workbench.views import workbench_stats, workbench_items
 
 urlpatterns = [
     path('api/auth/login', login_view),
@@ -64,4 +65,6 @@ urlpatterns = [
     path('api/supervisions/<str:pk>/reassign', supervisions_reassign),
     path('api/supervisions/<str:pk>/close', supervisions_close),
     path('api/supervisions/<str:pk>/dismiss', supervisions_dismiss),
+    path('api/workbench/stats', workbench_stats),
+    path('api/workbench/items', workbench_items),
 ]
