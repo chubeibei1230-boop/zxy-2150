@@ -4,6 +4,7 @@ import Dashboard from '@/pages/Dashboard';
 import VisitList from '@/pages/VisitList';
 import VisitDetail from '@/pages/VisitDetail';
 import WarningList from '@/pages/WarningList';
+import SupervisionList from '@/pages/SupervisionList';
 import RulesConfig from '@/pages/RulesConfig';
 import NotFound from '@/pages/NotFound';
 import MainLayout from '@/components/Layout/MainLayout';
@@ -26,6 +27,7 @@ function App() {
           <Route path="visits" element={<VisitList />} />
           <Route path="visits/:id" element={<VisitDetail />} />
           <Route path="warnings" element={<WarningList />} />
+          <Route path="supervisions" element={<SupervisionList />} />
           <Route
             path="rules"
             element={

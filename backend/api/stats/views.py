@@ -3,6 +3,7 @@ from common.decorators import require_role
 from common.utils import success_response
 from repositories import visit_repository, rule_repository
 from services.warning_engine import warning_engine, WARNING_TYPE_LABELS, WARNING_LEVEL_LABELS
+from services.supervision_engine import supervision_engine, SOURCE_LABELS, RISK_LABELS
 from collections import Counter
 
 
@@ -74,6 +75,29 @@ def dashboard_stats(request: HttpRequest) -> JsonResponse:
         for k, v in sorted(warning_stats.get('by_handler', {}).items(), key=lambda x: -x[1])
     ]
 
+    supervision_stats = supervision_engine.get_supervision_stats()
+
+    supervision_by_source = []
+    for src, label in SOURCE_LABELS.items():
+        supervision_by_source.append({
+            'source': src,
+            'label': label,
+            'count': supervision_stats.get('by_source', {}).get(src, 0),
+        })
+
+    supervision_by_risk = []
+    for risk, label in RISK_LABELS.items():
+        supervision_by_risk.append({
+            'risk': risk,
+            'label': label,
+            'count': supervision_stats.get('by_risk', {}).get(risk, 0),
+        })
+
+    supervision_by_assignee = [
+        {'assignee_name': k, 'count': v}
+        for k, v in sorted(supervision_stats.get('by_assignee', {}).items(), key=lambda x: -x[1])
+    ]
+
     stats = {
         'pending_count': pending_count,
         'reprocess_rate': reprocess_rate,
@@ -88,6 +112,18 @@ def dashboard_stats(request: HttpRequest) -> JsonResponse:
         'warning_by_type': warning_by_type,
         'warning_by_level': warning_by_level,
         'warning_by_handler': warning_by_handler,
+        'supervision_exception_count': supervision_stats.get('exception_count', 0),
+        'supervision_processing_count': supervision_stats.get('processing_count', 0),
+        'supervision_assigned_count': supervision_stats.get('assigned_count', 0),
+        'supervision_pending_count': supervision_stats.get('pending_count', 0),
+        'supervision_closed_count': supervision_stats.get('closed_count', 0),
+        'supervision_resolved_count': supervision_stats.get('resolved_count', 0),
+        'supervision_dismissed_count': supervision_stats.get('dismissed_count', 0),
+        'supervision_high_risk_ratio': supervision_stats.get('high_risk_ratio', 0),
+        'supervision_total': supervision_stats.get('total', 0),
+        'supervision_by_source': supervision_by_source,
+        'supervision_by_risk': supervision_by_risk,
+        'supervision_by_assignee': supervision_by_assignee,
     }
 
     return JsonResponse(success_response(stats))

@@ -8,11 +8,15 @@ import {
   BellOutlined,
   WarningOutlined,
   ExclamationCircleOutlined,
+  FlagOutlined,
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  AlertOutlined,
 } from '@ant-design/icons';
 import ReactECharts from 'echarts-for-react';
 import { useNavigate } from 'react-router-dom';
 import { getDashboardStats } from '@/api/stats';
-import { DashboardStats, VisitFilter, STATUS_OPTIONS, UNREACHABLE_REASONS, WarningFilter } from '@/types';
+import { DashboardStats, VisitFilter, STATUS_OPTIONS, UNREACHABLE_REASONS, WarningFilter, SupervisionFilter, SUPERVISION_RISK_OPTIONS } from '@/types';
 import { useVisitFilterStore } from '@/store/visitFilter';
 
 export default function Dashboard() {
@@ -68,6 +72,22 @@ export default function Dashboard() {
     [navigate]
   );
 
+  const navigateToSupervisions = useCallback(
+    (filter?: SupervisionFilter) => {
+      const params = new URLSearchParams();
+      if (filter) {
+        Object.entries(filter).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== '') {
+            params.append(key, String(value));
+          }
+        });
+      }
+      const queryString = params.toString();
+      navigate(queryString ? `/supervisions?${queryString}` : '/supervisions');
+    },
+    [navigate]
+  );
+
   const handleStatClick = (type: string) => {
     switch (type) {
       case 'pending':
@@ -84,6 +104,18 @@ export default function Dashboard() {
         break;
       case 'warnings':
         navigateToWarnings({ status: 'active' });
+        break;
+      case 'supervision_exception':
+        navigateToSupervisions({ status: 'active' });
+        break;
+      case 'supervision_processing':
+        navigateToSupervisions({ status: 'processing' });
+        break;
+      case 'supervision_closed':
+        navigateToSupervisions({ status: 'closed' });
+        break;
+      case 'supervision_high_risk':
+        navigateToSupervisions({ risk: 'high' });
         break;
     }
   };
@@ -261,6 +293,84 @@ export default function Dashboard() {
     },
   };
 
+  const supervisionSourceChartOption = stats
+    ? {
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+        grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+        xAxis: {
+          type: 'value',
+          axisLabel: { formatter: '{value} 条' },
+        },
+        yAxis: {
+          type: 'category',
+          data: stats.supervision_by_source.map((item) => item.label),
+        },
+        series: [
+          {
+            name: '督办数量',
+            type: 'bar',
+            data: stats.supervision_by_source.map((item, index) => ({
+              value: item.count,
+              itemStyle: {
+                color: ['#FF4D4F', '#FAAD14', '#1677FF', '#722ED1'][index % 4],
+              },
+            })),
+            label: {
+              show: true,
+              position: 'right',
+            },
+          },
+        ],
+      }
+    : {};
+
+  const supervisionRiskChartOption = stats
+    ? {
+        tooltip: { trigger: 'item' },
+        legend: { bottom: '5%', left: 'center' },
+        series: [
+          {
+            name: '风险级别',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            avoidLabelOverlap: false,
+            itemStyle: { borderRadius: 10, borderColor: '#fff', borderWidth: 2 },
+            label: { show: false },
+            emphasis: {
+              label: { show: true, fontSize: 16, fontWeight: 'bold' },
+            },
+            data: stats.supervision_by_risk.map((item) => ({
+              value: item.count,
+              name: item.label,
+              risk: item.risk,
+              itemStyle: {
+                color:
+                  item.risk === 'high' ? '#FF4D4F' : item.risk === 'medium' ? '#FAAD14' : '#1677FF',
+              },
+            })),
+          },
+        ],
+      }
+    : {};
+
+  const supervisionSourceChartEvents = {
+    click: (params: any) => {
+      const item = stats?.supervision_by_source.find((s) => s.label === params.name);
+      if (item) {
+        navigateToSupervisions({ source_type: item.source as any });
+      }
+    },
+  };
+
+  const supervisionRiskChartEvents = {
+    click: (params: any) => {
+      const item = stats?.supervision_by_risk.find((s) => s.label === params.name);
+      if (item) {
+        navigateToSupervisions({ risk: item.risk as any });
+      }
+    },
+  };
+
   if (loading) {
     return (
       <div style={{ textAlign: 'center', padding: '100px' }}>
@@ -370,6 +480,50 @@ export default function Dashboard() {
         </Col>
       </Row>
 
+      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+        <Col xs={24} sm={12} lg={6}>
+          <Card className="stat-card" onClick={() => handleStatClick('supervision_exception')} style={{ cursor: 'pointer', border: '1px solid #ff4d4f33' }}>
+            <Statistic
+              title="异常督办待处理"
+              value={stats?.supervision_exception_count || 0}
+              prefix={<FlagOutlined style={{ color: '#ff4d4f' }} />}
+              valueStyle={{ color: '#ff4d4f' }}
+            />
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <Card className="stat-card" onClick={() => handleStatClick('supervision_processing')} style={{ cursor: 'pointer' }}>
+            <Statistic
+              title="处理中"
+              value={stats?.supervision_processing_count || 0}
+              prefix={<CheckCircleOutlined style={{ color: '#1677ff' }} />}
+              valueStyle={{ color: '#1677ff' }}
+            />
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <Card className="stat-card" onClick={() => handleStatClick('supervision_closed')} style={{ cursor: 'pointer' }}>
+            <Statistic
+              title="已关闭"
+              value={stats?.supervision_closed_count || 0}
+              prefix={<CloseCircleOutlined style={{ color: '#52c41a' }} />}
+              valueStyle={{ color: '#52c41a' }}
+            />
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <Card className="stat-card" onClick={() => handleStatClick('supervision_high_risk')} style={{ cursor: 'pointer', border: '1px solid #ff4d4f22' }}>
+            <Statistic
+              title="高风险事项占比"
+              value={stats?.supervision_high_risk_ratio || 0}
+              suffix="%"
+              prefix={<AlertOutlined style={{ color: '#ff4d4f' }} />}
+              valueStyle={{ color: '#ff4d4f' }}
+            />
+          </Card>
+        </Col>
+      </Row>
+
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={12}>
           <Card title="回访状态分布">
@@ -413,6 +567,24 @@ export default function Dashboard() {
               option={unreachableChartOption}
               style={{ height: 300, cursor: 'pointer' }}
               onEvents={unreachableChartEvents}
+            />
+          </Card>
+        </Col>
+        <Col xs={24} lg={12}>
+          <Card title="异常督办来源分布">
+            <ReactECharts
+              option={supervisionSourceChartOption}
+              style={{ height: 300, cursor: 'pointer' }}
+              onEvents={supervisionSourceChartEvents}
+            />
+          </Card>
+        </Col>
+        <Col xs={24} lg={12}>
+          <Card title="督办风险级别分布">
+            <ReactECharts
+              option={supervisionRiskChartOption}
+              style={{ height: 300, cursor: 'pointer' }}
+              onEvents={supervisionRiskChartEvents}
             />
           </Card>
         </Col>

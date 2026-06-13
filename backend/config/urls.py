@@ -17,6 +17,17 @@ from api.warnings.views import (
     warning_rules_detail,
     warning_rules_delete,
 )
+from api.supervisions.views import (
+    supervisions_list,
+    supervisions_detail,
+    supervisions_generate,
+    supervisions_follow_up,
+    supervisions_resolve,
+    supervisions_reassign,
+    supervisions_close,
+    supervisions_dismiss,
+    supervisions_stats,
+)
 
 urlpatterns = [
     path('api/auth/login', login_view),
@@ -44,4 +55,13 @@ urlpatterns = [
     path('api/warning-rules', warning_rules_list),
     path('api/warning-rules/<str:pk>', warning_rules_detail),
     path('api/warning-rules/<str:pk>/delete', warning_rules_delete),
+    path('api/supervisions', supervisions_list),
+    path('api/supervisions/generate', supervisions_generate),
+    path('api/supervisions/stats', supervisions_stats),
+    path('api/supervisions/<str:pk>', supervisions_detail),
+    path('api/supervisions/<str:pk>/follow-up', supervisions_follow_up),
+    path('api/supervisions/<str:pk>/resolve', supervisions_resolve),
+    path('api/supervisions/<str:pk>/reassign', supervisions_reassign),
+    path('api/supervisions/<str:pk>/close', supervisions_close),
+    path('api/supervisions/<str:pk>/dismiss', supervisions_dismiss),
 ]
