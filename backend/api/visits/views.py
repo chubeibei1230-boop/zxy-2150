@@ -3,6 +3,7 @@ from common.decorators import require_role
 from common.utils import success_response, error_response, paginated_response, format_datetime, parse_datetime
 from repositories import visit_repository, repair_order_repository, rule_repository, category_repository
 from services.rule_engine import RuleEngine
+from services.warning_engine import warning_engine
 import datetime
 
 
@@ -129,6 +130,10 @@ def visits_process(request: HttpRequest, pk: str) -> JsonResponse:
     old_status = visit.get('status')
     update_data = {}
 
+    if new_status == 'unreachable':
+        current_count = visit.get('unreachable_count', 0)
+        update_data['unreachable_count'] = current_count + 1
+
     if new_status:
         update_data['status'] = new_status
     if satisfaction is not None:
@@ -158,7 +163,14 @@ def visits_process(request: HttpRequest, pk: str) -> JsonResponse:
 
     updated = visit_repository.update(pk, update_data)
 
-    return JsonResponse(success_response(updated, '处理成功'))
+    warning_result = warning_engine.refresh_visit_warnings(pk)
+
+    result_data = {
+        'visit': updated,
+        'warning': warning_result,
+    }
+
+    return JsonResponse(success_response(result_data, '处理成功'))
 
 
 @require_role(['admin'])
@@ -206,6 +218,7 @@ def visits_generate_reminders(request: HttpRequest) -> JsonResponse:
             'visit_result': None,
             'unresolved_note': None,
             'unreachable_reason': None,
+            'unreachable_count': 0,
             'matched_rules': matched_rules,
             'status_timeline': status_timeline,
             'created_at': now,

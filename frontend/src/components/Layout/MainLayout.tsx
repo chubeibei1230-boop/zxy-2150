@@ -1,5 +1,12 @@
-import { Layout, Menu, Dropdown, Avatar, theme } from 'antd';
-import { DashboardOutlined, UnorderedListOutlined, SettingOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
+import { Layout, Menu, Dropdown, Avatar, theme, Badge } from 'antd';
+import {
+  DashboardOutlined,
+  UnorderedListOutlined,
+  SettingOutlined,
+  LogoutOutlined,
+  UserOutlined,
+  BellOutlined,
+} from '@ant-design/icons';
 import { useLocation, useNavigate, Outlet } from 'react-router-dom';
 import { useAuthStore } from '@/store/auth';
 import { User } from '@/types';
@@ -33,6 +40,15 @@ export default function MainLayout() {
       label: '统计看板',
     },
     {
+      key: '/warnings',
+      icon: (
+        <Badge dot size="default" offset={[6, 2]}>
+          <BellOutlined />
+        </Badge>
+      ),
+      label: '异常预警',
+    },
+    {
       key: '/visits',
       icon: <UnorderedListOutlined />,
       label: '回访列表',
@@ -60,6 +76,9 @@ export default function MainLayout() {
   const getSelectedKey = () => {
     if (location.pathname.startsWith('/visits/')) {
       return '/visits';
+    }
+    if (location.pathname.startsWith('/warnings/')) {
+      return '/warnings';
     }
     return location.pathname;
   };

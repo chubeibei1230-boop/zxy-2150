@@ -2,6 +2,7 @@ from django.http import JsonResponse, HttpRequest
 from common.decorators import require_role
 from common.utils import success_response
 from repositories import visit_repository, rule_repository
+from services.warning_engine import warning_engine, WARNING_TYPE_LABELS, WARNING_LEVEL_LABELS
 from collections import Counter
 
 
@@ -50,6 +51,29 @@ def dashboard_stats(request: HttpRequest) -> JsonResponse:
         for status, count in status_counter.items()
     ]
 
+    warning_stats = warning_engine.get_warning_stats()
+
+    warning_by_type = []
+    for wt, label in WARNING_TYPE_LABELS.items():
+        warning_by_type.append({
+            'type': wt,
+            'label': label,
+            'count': warning_stats.get('by_type', {}).get(wt, 0),
+        })
+
+    warning_by_level = []
+    for lv, label in WARNING_LEVEL_LABELS.items():
+        warning_by_level.append({
+            'level': lv,
+            'label': label,
+            'count': warning_stats.get('by_level', {}).get(lv, 0),
+        })
+
+    warning_by_handler = [
+        {'handler_name': k, 'count': v}
+        for k, v in sorted(warning_stats.get('by_handler', {}).items(), key=lambda x: -x[1])
+    ]
+
     stats = {
         'pending_count': pending_count,
         'reprocess_rate': reprocess_rate,
@@ -57,7 +81,13 @@ def dashboard_stats(request: HttpRequest) -> JsonResponse:
         'total_visits': total_visits,
         'unreachable_reasons': unreachable_reasons_list,
         'rule_hit_ranking': rule_hit_ranking,
-        'status_distribution': status_distribution
+        'status_distribution': status_distribution,
+        'warning_active_count': warning_stats.get('active_count', 0),
+        'warning_processing_count': warning_stats.get('processing_count', 0),
+        'warning_total': warning_stats.get('total', 0),
+        'warning_by_type': warning_by_type,
+        'warning_by_level': warning_by_level,
+        'warning_by_handler': warning_by_handler,
     }
 
     return JsonResponse(success_response(stats))

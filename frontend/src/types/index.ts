@@ -66,11 +66,129 @@ export interface Visit {
   visit_result: string | null;
   unresolved_note: string | null;
   unreachable_reason: string | null;
+  unreachable_count: number;
   matched_rules: MatchedRuleSnapshot[];
   status_timeline: StatusEvent[];
   created_at: string;
   updated_at: string;
 }
+
+export type WarningType = 'long_pending' | 'low_satisfaction' | 'unreachable_many' | 'reprocess_timeout';
+export type WarningLevel = 'high' | 'medium' | 'low';
+export type WarningStatus = 'active' | 'processing' | 'resolved' | 'ignored';
+
+export interface WarningDetail {
+  pending_days?: number;
+  satisfaction?: number;
+  unreachable_count?: number;
+  reprocess_days?: number;
+  [key: string]: any;
+}
+
+export interface FollowUpRecord {
+  timestamp: string;
+  operator_id: string;
+  operator_name: string;
+  action: string;
+  note: string;
+}
+
+export interface Warning {
+  id: string;
+  visit_id: string;
+  visit_info: {
+    repair_order_no: string;
+    category_name: string;
+    user_name: string;
+    user_phone: string;
+    address: string;
+    repair_content: string;
+    handler_id: string;
+    handler_name: string;
+    status: VisitStatus;
+    satisfaction: number | null;
+    completed_at: string;
+    created_at: string;
+  };
+  warning_type: WarningType;
+  warning_type_label?: string;
+  warning_rule_id: string | null;
+  level: WarningLevel;
+  level_label?: string;
+  priority: number;
+  reminder_text: string;
+  detail: WarningDetail;
+  status: WarningStatus;
+  follow_up_records: FollowUpRecord[];
+  created_at: string;
+  updated_at: string;
+  resolved_at: string | null;
+  resolved_by: string | null;
+  resolved_note: string | null;
+}
+
+export interface WarningFilter {
+  warning_type?: WarningType;
+  level?: WarningLevel;
+  status?: WarningStatus | 'active';
+  handler_id?: string;
+  keyword?: string;
+  date_from?: string;
+  date_to?: string;
+  page?: number;
+  page_size?: number;
+}
+
+export interface WarningRule {
+  id: string;
+  type: WarningType;
+  type_label?: string;
+  name: string;
+  description: string;
+  enabled: boolean;
+  priority: number;
+  params: {
+    pending_days?: number;
+    satisfaction_threshold?: number;
+    unreachable_count?: number;
+    reprocess_days?: number;
+    [key: string]: any;
+  };
+  reminder_text: string;
+  level: WarningLevel;
+  level_label?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface WarningStats {
+  total: number;
+  active_count: number;
+  processing_count: number;
+  by_type: Record<WarningType, number>;
+  by_level: Record<WarningLevel, number>;
+  by_handler: Record<string, number>;
+}
+
+export const WARNING_TYPE_OPTIONS: { value: WarningType; label: string }[] = [
+  { value: 'long_pending', label: '长期未处理' },
+  { value: 'low_satisfaction', label: '满意度偏低' },
+  { value: 'unreachable_many', label: '无法联系次数偏多' },
+  { value: 'reprocess_timeout', label: '二次处理超时未关闭' },
+];
+
+export const WARNING_LEVEL_OPTIONS: { value: WarningLevel; label: string; color: string }[] = [
+  { value: 'high', label: '高', color: 'red' },
+  { value: 'medium', label: '中', color: 'orange' },
+  { value: 'low', label: '低', color: 'blue' },
+];
+
+export const WARNING_STATUS_OPTIONS: { value: WarningStatus | 'active'; label: string; color: string }[] = [
+  { value: 'active', label: '进行中', color: 'processing' },
+  { value: 'processing', label: '处理中', color: 'blue' },
+  { value: 'resolved', label: '已解除', color: 'success' },
+  { value: 'ignored', label: '已忽略', color: 'default' },
+];
 
 export interface VisitFilter {
   keyword?: string;
@@ -104,6 +222,12 @@ export interface DashboardStats {
   unreachable_reasons: { reason: string; count: number }[];
   rule_hit_ranking: { rule_id: string; rule_name: string; hit_count: number }[];
   status_distribution: { status: string; count: number }[];
+  warning_active_count: number;
+  warning_processing_count: number;
+  warning_total: number;
+  warning_by_type: { type: string; label: string; count: number }[];
+  warning_by_level: { level: string; label: string; count: number }[];
+  warning_by_handler: { handler_name: string; count: number }[];
 }
 
 export interface ApiResponse<T = any> {

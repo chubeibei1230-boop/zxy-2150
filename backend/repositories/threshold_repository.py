@@ -16,6 +16,10 @@ DEFAULT_THRESHOLD = {
     'satisfaction_standard': 4,
     'max_unreachable_attempts': 3,
     'repeat_repair_days': 30,
+    'warning_pending_days': 3,
+    'warning_low_satisfaction': 3,
+    'warning_unreachable_count': 2,
+    'warning_reprocess_days': 3,
 }
 
 

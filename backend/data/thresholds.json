@@ -3,6 +3,12 @@
     "default_visit_days": 7,
     "satisfaction_standard": 4,
     "max_unreachable_attempts": 3,
-    "repeat_repair_days": 30
+    "repeat_repair_days": 30,
+    "warning_pending_days": 3,
+    "warning_low_satisfaction": 3,
+    "warning_unreachable_count": 2,
+    "warning_reprocess_days": 3,
+    "warning_follow_up_days": 1,
+    "warning_escalation_days": 2
   }
 }

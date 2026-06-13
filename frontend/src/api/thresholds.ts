@@ -5,6 +5,10 @@ export interface ThresholdConfig {
   satisfaction_standard: number;
   max_unreachable_attempts: number;
   repeat_repair_days: number;
+  warning_pending_days: number;
+  warning_low_satisfaction: number;
+  warning_unreachable_count: number;
+  warning_reprocess_days: number;
 }
 
 export const getThresholds = (): Promise<ThresholdConfig> => {

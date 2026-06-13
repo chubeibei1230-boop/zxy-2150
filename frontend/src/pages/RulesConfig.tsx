@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import {
   Tabs, Table, Tag, Button, Form, Input, InputNumber, Select, Switch, Modal, Space, Spin, message, Popconfirm, Card, Row, Col } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, KeyOutlined, BellOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined, DeleteOutlined, KeyOutlined, BellOutlined, SettingOutlined } from '@ant-design/icons';
 import { getRules, createRule, updateRule, deleteRule } from '@/api/rules';
 import { getCategories, createCategory, updateCategory, deleteCategory } from '@/api/categories';
 import { getUsers, createUser, updateUser, deleteUser, resetPassword } from '@/api/users';
 import { getThresholds, updateThresholds, ThresholdConfig } from '@/api/thresholds';
+import { getWarningRules, createWarningRule, updateWarningRule, deleteWarningRule, refreshWarnings } from '@/api/warnings';
 import { generateReminders } from '@/api/visits';
-import { Rule, Category, User } from '@/types';
+import { Rule, Category, User, WarningRule, WARNING_TYPE_OPTIONS, WARNING_LEVEL_OPTIONS } from '@/types';
 import type { ColumnsType } from 'antd/es/table';
 
 const { TextArea } = Input;
@@ -18,6 +19,12 @@ const DEFAULT_THRESHOLD: ThresholdConfig = {
   satisfaction_standard: 4,
   max_unreachable_attempts: 3,
   repeat_repair_days: 30,
+  warning_pending_days: 3,
+  warning_low_satisfaction: 3,
+  warning_unreachable_count: 2,
+  warning_reprocess_days: 3,
+  warning_follow_up_days: 1,
+  warning_escalation_days: 2,
 };
 
 export default function RulesConfig() {
@@ -26,22 +33,26 @@ export default function RulesConfig() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [threshold, setThreshold] = useState<ThresholdConfig>(DEFAULT_THRESHOLD);
+  const [warningRules, setWarningRules] = useState<WarningRule[]>([]);
 
   const [categoryModal, setCategoryModal] = useState(false);
   const [ruleModal, setRuleModal] = useState(false);
   const [userModal, setUserModal] = useState(false);
   const [resetPwdModal, setResetPwdModal] = useState(false);
+  const [warningRuleModal, setWarningRuleModal] = useState(false);
 
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [editingRule, setEditingRule] = useState<Rule | null>(null);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [resetUser, setResetUser] = useState<User | null>(null);
+  const [editingWarningRule, setEditingWarningRule] = useState<WarningRule | null>(null);
 
   const [categoryForm] = Form.useForm();
   const [ruleForm] = Form.useForm();
   const [userForm] = Form.useForm();
   const [thresholdForm] = Form.useForm();
   const [pwdForm] = Form.useForm();
+  const [warningRuleForm] = Form.useForm();
 
   useEffect(() => {
     fetchAllData();
@@ -51,16 +62,32 @@ export default function RulesConfig() {
   const fetchAllData = async () => {
     setLoading(true);
     try {
-      const [rulesData, categoriesData, usersData] = await Promise.all([
+      const [rulesData, categoriesData, usersData, warningRulesData] = await Promise.all([
         getRules(),
         getCategories(),
         getUsers(),
+        getWarningRules(),
       ]);
       setRules(rulesData.sort((a, b) => a.priority - b.priority));
       setCategories(categoriesData);
       setUsers(usersData);
+      setWarningRules(warningRulesData.sort((a, b) => a.priority - b.priority));
     } catch (err: any) {
       message.error(err.message || '获取数据失败');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRefreshWarnings = async () => {
+    setLoading(true);
+    try {
+      const result = await refreshWarnings();
+      message.success(
+        `预警刷新完成：新增 ${result.created} 条，更新 ${result.updated} 条，解除 ${result.resolved} 条`
+      );
+    } catch (err: any) {
+      message.error(err.message || '刷新预警失败');
     } finally {
       setLoading(false);
     }
@@ -271,6 +298,64 @@ export default function RulesConfig() {
     }
   };
 
+  const handleAddWarningRule = () => {
+    setEditingWarningRule(null);
+    warningRuleForm.resetFields();
+    warningRuleForm.setFieldsValue({
+      priority: warningRules.length + 1,
+      enabled: true,
+      level: 'medium',
+      params: {},
+    });
+    setWarningRuleModal(true);
+  };
+
+  const handleEditWarningRule = (rule: WarningRule) => {
+    setEditingWarningRule(rule);
+    warningRuleForm.setFieldsValue({
+      ...rule,
+      params: { ...rule.params },
+    });
+    setWarningRuleModal(true);
+  };
+
+  const handleDeleteWarningRule = async (id: string) => {
+    try {
+      await deleteWarningRule(id);
+      message.success('删除成功');
+      fetchAllData();
+    } catch (err: any) {
+      message.error(err.message || '删除失败');
+    }
+  };
+
+  const handleSubmitWarningRule = async (values: any) => {
+    try {
+      if (editingWarningRule) {
+        await updateWarningRule(editingWarningRule.id, values);
+        message.success('更新成功');
+      } else {
+        await createWarningRule(values);
+        message.success('创建成功');
+      }
+      setWarningRuleModal(false);
+      setEditingWarningRule(null);
+      fetchAllData();
+    } catch (err: any) {
+      message.error(err.message || '保存失败');
+    }
+  };
+
+  const handleToggleWarningRule = async (rule: WarningRule, checked: boolean) => {
+    try {
+      await updateWarningRule(rule.id, { enabled: checked });
+      message.success(checked ? '已启用' : '已禁用');
+      fetchAllData();
+    } catch (err: any) {
+      message.error(err.message || '操作失败');
+    }
+  };
+
   const categoryColumns: ColumnsType<Category> = [
     { title: '名称', dataIndex: 'name', key: 'name', width: 150 },
     { title: '描述', dataIndex: 'description', key: 'description', ellipsis: true },
@@ -360,6 +445,48 @@ export default function RulesConfig() {
     },
   ];
 
+  const warningRuleColumns: ColumnsType<WarningRule> = [
+    { title: '优先级', dataIndex: 'priority', key: 'priority', width: 80, render: (v: number) => <Tag color="blue">{v}</Tag> },
+    { title: '预警类型', dataIndex: 'type_label', key: 'type_label', width: 150 },
+    { title: '规则名称', dataIndex: 'name', key: 'name', width: 150 },
+    { title: '描述', dataIndex: 'description', key: 'description', ellipsis: true },
+    {
+      title: '预警级别', dataIndex: 'level_label', key: 'level_label', width: 100,
+      render: (label: string, record) => {
+        const opt = WARNING_LEVEL_OPTIONS.find((o) => o.value === record.level);
+        return <Tag color={opt?.color}>{label}</Tag>;
+      },
+    },
+    {
+      title: '规则参数', dataIndex: 'params', key: 'params', width: 180,
+      render: (params: any) => {
+        const parts: string[] = [];
+        if (params?.pending_days) parts.push(`待处理≥${params.pending_days}天`);
+        if (params?.satisfaction_threshold) parts.push(`满意度≤${params.satisfaction_threshold}分`);
+        if (params?.unreachable_count) parts.push(`无法联系≥${params.unreachable_count}次`);
+        if (params?.reprocess_days) parts.push(`二次处理≥${params.reprocess_days}天`);
+        return parts.length > 0 ? parts.join('，') : '-';
+      },
+    },
+    {
+      title: '状态', dataIndex: 'enabled', key: 'enabled', width: 100,
+      render: (val: boolean, record) => (
+        <Switch checked={val} onChange={(checked) => handleToggleWarningRule(record, checked)} />
+      ),
+    },
+    {
+      title: '操作', key: 'action', width: 150,
+      render: (_, record) => (
+        <Space>
+          <Button type="link" size="small" icon={<EditOutlined />} onClick={() => handleEditWarningRule(record)}>编辑</Button>
+          <Popconfirm title="确定删除此预警规则？" onConfirm={() => handleDeleteWarningRule(record.id)} okText="确定" cancelText="取消">
+            <Button type="link" size="small" danger icon={<DeleteOutlined />}>删除</Button>
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ];
+
   return (
     <div>
       <Card>
@@ -386,7 +513,7 @@ export default function RulesConfig() {
           </TabPane>
 
           <TabPane tab="提醒阈值" key="3">
-            <Card title="全局阈值配置" style={{ maxWidth: 600 }}>
+            <Card title="全局阈值配置" style={{ maxWidth: 700 }}>
               <Form form={thresholdForm} layout="vertical" onFinish={saveThreshold}>
                 <Row gutter={16}>
                   <Col span={12}>
@@ -410,6 +537,44 @@ export default function RulesConfig() {
                     </Form.Item>
                   </Col>
                 </Row>
+                <Card type="inner" title="预警阈值配置" style={{ marginTop: 16, marginBottom: 16 }} size="small">
+                  <Row gutter={16}>
+                    <Col span={12}>
+                      <Form.Item name="warning_pending_days" label="长期未处理阈值(天)" rules={[{ required: true, message: '请输入天数' }]}>
+                        <InputNumber min={1} style={{ width: '100%' }} placeholder="待处理超过多少天触发预警" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item name="warning_low_satisfaction" label="低满意度阈值(分)" rules={[{ required: true, message: '请输入分数' }]}>
+                        <InputNumber min={1} max={5} style={{ width: '100%' }} placeholder="低于多少分触发预警" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item name="warning_unreachable_count" label="无法联系次数阈值" rules={[{ required: true, message: '请输入次数' }]}>
+                        <InputNumber min={1} style={{ width: '100%' }} placeholder="超过多少次触发预警" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item name="warning_reprocess_days" label="二次处理超时阈值(天)" rules={[{ required: true, message: '请输入天数' }]}>
+                        <InputNumber min={1} style={{ width: '100%' }} placeholder="二次处理超过多少天触发预警" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Card>
+                <Card type="inner" title="跟进超时配置" style={{ marginBottom: 16 }} size="small">
+                  <Row gutter={16}>
+                    <Col span={12}>
+                      <Form.Item name="warning_follow_up_days" label="跟进提醒阈值(天)" rules={[{ required: true, message: '请输入天数' }]}>
+                        <InputNumber min={1} style={{ width: '100%' }} placeholder="预警未跟进多少天触发提醒" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item name="warning_escalation_days" label="自动升级阈值(天)" rules={[{ required: true, message: '请输入天数' }]}>
+                        <InputNumber min={1} style={{ width: '100%' }} placeholder="预警未跟进多少天自动升级级别" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Card>
                 <Form.Item style={{ marginBottom: 0 }}>
                   <Button type="primary" htmlType="submit">保存配置</Button>
                 </Form.Item>
@@ -423,6 +588,18 @@ export default function RulesConfig() {
             </div>
             <Spin spinning={loading}>
               <Table columns={userColumns} dataSource={users} rowKey="id" pagination={false} scroll={{ x: 900 }} />
+            </Spin>
+          </TabPane>
+
+          <TabPane tab={<span><SettingOutlined /> 预警规则</span>} key="5">
+            <div style={{ marginBottom: 16, textAlign: 'right' }}>
+              <Space>
+                <Button icon={<BellOutlined />} onClick={handleRefreshWarnings}>刷新预警</Button>
+                <Button type="primary" icon={<PlusOutlined />} onClick={handleAddWarningRule}>新增预警规则</Button>
+              </Space>
+            </div>
+            <Spin spinning={loading}>
+              <Table columns={warningRuleColumns} dataSource={warningRules} rowKey="id" pagination={false} scroll={{ x: 1200 }} />
             </Spin>
           </TabPane>
         </Tabs>
@@ -495,6 +672,82 @@ export default function RulesConfig() {
           <Form.Item name="password" label="新密码" rules={[{ required: true, message: '请输入新密码' }, { min: 6, message: '密码至少6位' }]}><Input.Password placeholder="请输入新密码" /></Form.Item>
           <Form.Item style={{ marginBottom: 0, textAlign: 'right' }}>
             <Space><Button onClick={() => setResetPwdModal(false)}>取消</Button><Button type="primary" htmlType="submit">确认重置</Button></Space>
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      <Modal title={editingWarningRule ? '编辑预警规则' : '新增预警规则'} open={warningRuleModal} onCancel={() => { setWarningRuleModal(false); setEditingWarningRule(null); }} footer={null} width={600} destroyOnClose>
+        <Form form={warningRuleForm} layout="vertical" onFinish={handleSubmitWarningRule}>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item name="type" label="预警类型" rules={[{ required: true, message: '请选择预警类型' }]}>
+                <Select placeholder="请选择">
+                  {WARNING_TYPE_OPTIONS.map((opt) => (
+                    <Select.Option key={opt.value} value={opt.value}>{opt.label}</Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="level" label="预警级别" rules={[{ required: true, message: '请选择预警级别' }]}>
+                <Select placeholder="请选择">
+                  {WARNING_LEVEL_OPTIONS.map((opt) => (
+                    <Select.Option key={opt.value} value={opt.value}>{opt.label}</Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item name="name" label="规则名称" rules={[{ required: true, message: '请输入规则名称' }]}>
+                <Input placeholder="请输入规则名称" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="priority" label="优先级" rules={[{ required: true, message: '请输入优先级' }]}>
+                <InputNumber min={1} style={{ width: '100%' }} placeholder="数字越小优先级越高" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item name="description" label="规则描述" rules={[{ required: true, message: '请输入规则描述' }]}>
+            <TextArea rows={2} placeholder="请输入规则描述" />
+          </Form.Item>
+          <Form.Item name="reminder_text" label="预警提醒文案" rules={[{ required: true, message: '请输入提醒文案' }]}>
+            <TextArea rows={2} placeholder="预警触发时显示的提醒内容" />
+          </Form.Item>
+          <Card type="inner" title="规则参数" size="small" style={{ marginBottom: 16 }}>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item name={['params', 'pending_days']} label="待处理天数阈值">
+                  <InputNumber min={1} style={{ width: '100%' }} placeholder="长期未处理规则使用" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item name={['params', 'satisfaction_threshold']} label="满意度阈值">
+                  <InputNumber min={1} max={5} style={{ width: '100%' }} placeholder="低满意度规则使用" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item name={['params', 'unreachable_count']} label="无法联系次数阈值">
+                  <InputNumber min={1} style={{ width: '100%' }} placeholder="无法联系规则使用" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item name={['params', 'reprocess_days']} label="二次处理天数阈值">
+                  <InputNumber min={1} style={{ width: '100%' }} placeholder="二次处理超时规则使用" />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
+          <Form.Item name="enabled" label="是否启用" valuePropName="checked">
+            <Switch defaultChecked />
+          </Form.Item>
+          <Form.Item style={{ marginBottom: 0, textAlign: 'right' }}>
+            <Space>
+              <Button onClick={() => { setWarningRuleModal(false); setEditingWarningRule(null); }}>取消</Button>
+              <Button type="primary" htmlType="submit">保存</Button>
+            </Space>
           </Form.Item>
         </Form>
       </Modal>

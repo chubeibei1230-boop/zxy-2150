@@ -12,32 +12,33 @@
       "repair_content": "客厅灯不亮，需要检查电路",
       "handler_id": "user-002",
       "handler_name": "回访操作员",
-      "completed_at": "2024-06-01T10:30:00+08:00",
+      "completed_at": "2026-06-01T10:30:00+08:00",
       "status": "pending",
       "satisfaction": null,
       "visit_result": null,
       "unresolved_note": null,
       "unreachable_reason": null,
+      "unreachable_count": 0,
       "matched_rules": [
         {
           "rule_id": "rule-001",
           "rule_name": "常规回访提醒",
           "rule_description": "维修完成3天后进行常规满意度回访",
           "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
-          "matched_at": "2024-06-04T09:00:00+08:00"
+          "matched_at": "2026-06-04T09:00:00+08:00"
         }
       ],
       "status_timeline": [
         {
           "status": "pending",
-          "timestamp": "2024-06-04T09:00:00+08:00",
+          "timestamp": "2026-06-04T09:00:00+08:00",
           "operator_id": "system",
           "operator_name": "系统",
           "remark": "系统自动创建回访任务"
         }
       ],
-      "created_at": "2024-06-04T09:00:00+08:00",
-      "updated_at": "2024-06-04T09:00:00+08:00"
+      "created_at": "2026-06-04T09:00:00+08:00",
+      "updated_at": "2026-06-04T09:00:00+08:00"
     },
     {
       "id": "visit-002",
@@ -51,32 +52,33 @@
       "repair_content": "空调不制冷，需要维修",
       "handler_id": "user-002",
       "handler_name": "回访操作员",
-      "completed_at": "2024-06-02T14:20:00+08:00",
+      "completed_at": "2026-06-02T14:20:00+08:00",
       "status": "pending",
       "satisfaction": null,
       "visit_result": null,
       "unresolved_note": null,
       "unreachable_reason": null,
+      "unreachable_count": 0,
       "matched_rules": [
         {
           "rule_id": "rule-001",
           "rule_name": "常规回访提醒",
           "rule_description": "维修完成3天后进行常规满意度回访",
           "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
-          "matched_at": "2024-06-05T09:00:00+08:00"
+          "matched_at": "2026-06-05T09:00:00+08:00"
         }
       ],
       "status_timeline": [
         {
           "status": "pending",
-          "timestamp": "2024-06-05T09:00:00+08:00",
+          "timestamp": "2026-06-05T09:00:00+08:00",
           "operator_id": "system",
           "operator_name": "系统",
           "remark": "系统自动创建回访任务"
         }
       ],
-      "created_at": "2024-06-05T09:00:00+08:00",
-      "updated_at": "2024-06-05T09:00:00+08:00"
+      "created_at": "2026-06-05T09:00:00+08:00",
+      "updated_at": "2026-06-05T09:00:00+08:00"
     },
     {
       "id": "visit-003",
@@ -90,32 +92,33 @@
       "repair_content": "房门铰链松动，需要加固",
       "handler_id": "user-002",
       "handler_name": "回访操作员",
-      "completed_at": "2024-06-03T11:00:00+08:00",
+      "completed_at": "2026-06-02T11:00:00+08:00",
       "status": "pending",
       "satisfaction": null,
       "visit_result": null,
       "unresolved_note": null,
       "unreachable_reason": null,
+      "unreachable_count": 0,
       "matched_rules": [
         {
           "rule_id": "rule-001",
           "rule_name": "常规回访提醒",
           "rule_description": "维修完成3天后进行常规满意度回访",
           "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
-          "matched_at": "2024-06-06T09:00:00+08:00"
+          "matched_at": "2026-06-05T09:00:00+08:00"
         }
       ],
       "status_timeline": [
         {
           "status": "pending",
-          "timestamp": "2024-06-06T09:00:00+08:00",
+          "timestamp": "2026-06-05T09:00:00+08:00",
           "operator_id": "system",
           "operator_name": "系统",
           "remark": "系统自动创建回访任务"
         }
       ],
-      "created_at": "2024-06-06T09:00:00+08:00",
-      "updated_at": "2024-06-06T09:00:00+08:00"
+      "created_at": "2026-06-05T09:00:00+08:00",
+      "updated_at": "2026-06-05T09:00:00+08:00"
     },
     {
       "id": "visit-004",
@@ -299,46 +302,47 @@
       "repair_content": "插座没电，需要检查线路",
       "handler_id": "user-002",
       "handler_name": "回访操作员",
-      "completed_at": "2024-06-08T11:30:00+08:00",
+      "completed_at": "2026-06-01T11:30:00+08:00",
       "status": "contacted",
-      "satisfaction": 2,
+      "satisfaction": 5,
       "visit_result": "用户表示插座问题仍偶尔出现，不太满意",
       "unresolved_note": "插座问题未完全解决",
       "unreachable_reason": null,
+      "unreachable_count": 0,
       "matched_rules": [
         {
           "rule_id": "rule-001",
           "rule_name": "常规回访提醒",
           "rule_description": "维修完成3天后进行常规满意度回访",
           "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
-          "matched_at": "2024-06-11T09:00:00+08:00"
+          "matched_at": "2026-06-04T09:00:00+08:00"
         },
         {
           "rule_id": "rule-003",
           "rule_name": "重复报修重点回访",
           "rule_description": "同一用户30天内同类报修，维修完成后立即回访",
           "reminder_text": "您好，注意到您近期多次报修同类问题，我们特别重视，希望能帮您彻底解决。",
-          "matched_at": "2024-06-11T09:00:00+08:00"
+          "matched_at": "2026-06-04T09:00:00+08:00"
         }
       ],
       "status_timeline": [
         {
           "status": "pending",
-          "timestamp": "2024-06-11T09:00:00+08:00",
+          "timestamp": "2026-06-04T09:00:00+08:00",
           "operator_id": "system",
           "operator_name": "系统",
           "remark": "系统自动创建回访任务，命中重复报修规则"
         },
         {
           "status": "contacted",
-          "timestamp": "2024-06-11T10:30:00+08:00",
+          "timestamp": "2026-06-04T10:30:00+08:00",
           "operator_id": "user-002",
           "operator_name": "回访操作员",
           "remark": "电话联系成功，用户评价2分，表示问题未完全解决"
         }
       ],
-      "created_at": "2024-06-11T09:00:00+08:00",
-      "updated_at": "2024-06-11T10:30:00+08:00"
+      "created_at": "2026-06-04T09:00:00+08:00",
+      "updated_at": "2026-06-04T10:30:00+08:00"
     },
     {
       "id": "visit-009",
@@ -451,46 +455,47 @@
       "repair_content": "墙面开裂，需要修补",
       "handler_id": "user-002",
       "handler_name": "回访操作员",
-      "completed_at": "2024-06-11T15:00:00+08:00",
+      "completed_at": "2026-06-01T15:00:00+08:00",
       "status": "reprocess",
       "satisfaction": 2,
       "visit_result": "用户表示墙面修补处仍有开裂痕迹",
       "unresolved_note": "墙面修补质量不佳，需要重新处理",
       "unreachable_reason": null,
+      "unreachable_count": 0,
       "matched_rules": [
         {
           "rule_id": "rule-001",
           "rule_name": "常规回访提醒",
           "rule_description": "维修完成3天后进行常规满意度回访",
           "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
-          "matched_at": "2024-06-14T09:00:00+08:00"
+          "matched_at": "2026-06-04T09:00:00+08:00"
         }
       ],
       "status_timeline": [
         {
           "status": "pending",
-          "timestamp": "2024-06-14T09:00:00+08:00",
+          "timestamp": "2026-06-04T09:00:00+08:00",
           "operator_id": "system",
           "operator_name": "系统",
           "remark": "系统自动创建回访任务"
         },
         {
           "status": "contacted",
-          "timestamp": "2024-06-14T10:30:00+08:00",
+          "timestamp": "2026-06-04T10:30:00+08:00",
           "operator_id": "user-002",
           "operator_name": "回访操作员",
           "remark": "电话联系成功，用户评价2分"
         },
         {
           "status": "reprocess",
-          "timestamp": "2024-06-14T11:00:00+08:00",
+          "timestamp": "2026-06-04T11:00:00+08:00",
           "operator_id": "user-002",
           "operator_name": "回访操作员",
           "remark": "用户反馈问题未解决，转为二次处理"
         }
       ],
-      "created_at": "2024-06-14T09:00:00+08:00",
-      "updated_at": "2024-06-14T11:00:00+08:00"
+      "created_at": "2026-06-04T09:00:00+08:00",
+      "updated_at": "2026-06-04T11:00:00+08:00"
     },
     {
       "id": "visit-012",
@@ -504,46 +509,47 @@
       "repair_content": "空气开关跳闸，需要检查",
       "handler_id": "user-002",
       "handler_name": "回访操作员",
-      "completed_at": "2024-06-12T09:00:00+08:00",
+      "completed_at": "2026-06-01T09:00:00+08:00",
       "status": "reprocess",
       "satisfaction": 1,
       "visit_result": "用户表示空气开关仍然频繁跳闸，问题严重",
       "unresolved_note": "电路问题未解决，存在安全隐患，需紧急处理",
       "unreachable_reason": null,
+      "unreachable_count": 0,
       "matched_rules": [
         {
           "rule_id": "rule-001",
           "rule_name": "常规回访提醒",
           "rule_description": "维修完成3天后进行常规满意度回访",
           "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
-          "matched_at": "2024-06-15T09:00:00+08:00"
+          "matched_at": "2026-06-04T09:00:00+08:00"
         }
       ],
       "status_timeline": [
         {
           "status": "pending",
-          "timestamp": "2024-06-15T09:00:00+08:00",
+          "timestamp": "2026-06-04T09:00:00+08:00",
           "operator_id": "system",
           "operator_name": "系统",
           "remark": "系统自动创建回访任务"
         },
         {
           "status": "contacted",
-          "timestamp": "2024-06-15T10:00:00+08:00",
+          "timestamp": "2026-06-04T10:00:00+08:00",
           "operator_id": "user-002",
           "operator_name": "回访操作员",
           "remark": "电话联系成功，用户评价1分，非常不满意"
         },
         {
           "status": "reprocess",
-          "timestamp": "2024-06-15T10:30:00+08:00",
+          "timestamp": "2026-06-04T10:30:00+08:00",
           "operator_id": "user-002",
           "operator_name": "回访操作员",
           "remark": "问题严重，立即安排二次处理"
         }
       ],
-      "created_at": "2024-06-15T09:00:00+08:00",
-      "updated_at": "2024-06-15T10:30:00+08:00"
+      "created_at": "2026-06-04T09:00:00+08:00",
+      "updated_at": "2026-06-04T10:30:00+08:00"
     },
     {
       "id": "visit-013",
@@ -815,39 +821,54 @@
       "repair_content": "灯具开关失灵，需要更换",
       "handler_id": "user-002",
       "handler_name": "回访操作员",
-      "completed_at": "2024-06-16T10:30:00+08:00",
+      "completed_at": "2026-06-01T10:30:00+08:00",
       "status": "unreachable",
       "satisfaction": null,
       "visit_result": null,
       "unresolved_note": null,
       "unreachable_reason": "phone_off",
+      "unreachable_count": 3,
       "matched_rules": [
         {
           "rule_id": "rule-001",
           "rule_name": "常规回访提醒",
           "rule_description": "维修完成3天后进行常规满意度回访",
           "reminder_text": "您好，您的维修服务已完成3天，方便对我们的服务进行评价吗？",
-          "matched_at": "2024-06-19T09:00:00+08:00"
+          "matched_at": "2026-06-04T09:00:00+08:00"
         }
       ],
       "status_timeline": [
         {
           "status": "pending",
-          "timestamp": "2024-06-19T09:00:00+08:00",
+          "timestamp": "2026-06-04T09:00:00+08:00",
           "operator_id": "system",
           "operator_name": "系统",
           "remark": "系统自动创建回访任务"
         },
         {
           "status": "unreachable",
-          "timestamp": "2024-06-19T14:00:00+08:00",
+          "timestamp": "2026-06-04T10:00:00+08:00",
           "operator_id": "user-002",
           "operator_name": "回访操作员",
-          "remark": "多次拨打用户电话，用户手机关机"
+          "remark": "第一次拨打，用户手机关机"
+        },
+        {
+          "status": "unreachable",
+          "timestamp": "2026-06-05T09:00:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "第二次拨打，用户手机关机"
+        },
+        {
+          "status": "unreachable",
+          "timestamp": "2026-06-06T14:00:00+08:00",
+          "operator_id": "user-002",
+          "operator_name": "回访操作员",
+          "remark": "第三次拨打，用户手机关机"
         }
       ],
-      "created_at": "2024-06-19T09:00:00+08:00",
-      "updated_at": "2024-06-19T14:00:00+08:00"
+      "created_at": "2026-06-04T09:00:00+08:00",
+      "updated_at": "2026-06-06T14:00:00+08:00"
     },
     {
       "id": "visit-019",

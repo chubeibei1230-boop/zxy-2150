@@ -1,0 +1,64 @@
+{
+  "warning_rules": [
+    {
+      "id": "wr-001",
+      "type": "long_pending",
+      "name": "长期未处理预警",
+      "description": "回访单处于待处理状态超过指定天数触发预警",
+      "enabled": true,
+      "priority": 1,
+      "params": {
+        "pending_days": 3
+      },
+      "reminder_text": "该回访单已超过3天未处理，请及时跟进",
+      "level": "high",
+      "created_at": "2024-01-01T00:00:00+08:00",
+      "updated_at": "2024-01-01T00:00:00+08:00"
+    },
+    {
+      "id": "wr-002",
+      "type": "low_satisfaction",
+      "name": "满意度偏低预警",
+      "description": "回访满意度低于指定分数触发预警",
+      "enabled": true,
+      "priority": 2,
+      "params": {
+        "satisfaction_threshold": 3
+      },
+      "reminder_text": "该回访单满意度偏低，需重点关注用户体验",
+      "level": "medium",
+      "created_at": "2024-01-01T00:00:00+08:00",
+      "updated_at": "2024-01-01T00:00:00+08:00"
+    },
+    {
+      "id": "wr-003",
+      "type": "unreachable_many",
+      "name": "无法联系次数偏多预警",
+      "description": "同一回访单无法联系次数超过指定次数触发预警",
+      "enabled": true,
+      "priority": 3,
+      "params": {
+        "unreachable_count": 2
+      },
+      "reminder_text": "该回访单多次无法联系用户，请尝试其他联系方式",
+      "level": "medium",
+      "created_at": "2024-01-01T00:00:00+08:00",
+      "updated_at": "2024-01-01T00:00:00+08:00"
+    },
+    {
+      "id": "wr-004",
+      "type": "reprocess_timeout",
+      "name": "二次处理超时预警",
+      "description": "回访单进入二次处理状态超过指定天数未关闭触发预警",
+      "enabled": true,
+      "priority": 1,
+      "params": {
+        "reprocess_days": 3
+      },
+      "reminder_text": "该回访单进入二次处理已超过3天未关闭，请尽快闭环",
+      "level": "high",
+      "created_at": "2024-01-01T00:00:00+08:00",
+      "updated_at": "2024-01-01T00:00:00+08:00"
+    }
+  ]
+}
